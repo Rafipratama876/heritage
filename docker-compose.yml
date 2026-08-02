@@ -1,0 +1,110 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: rizal-heritage-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: rizal_heritage
+      MYSQL_USER: rizal
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-rizalpassword}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - rizal-network
+
+  backend:
+    build:
+      context: ./backend
+      target: production
+    container_name: rizal-heritage-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "mysql://rizal:${MYSQL_PASSWORD:-rizalpassword}@mysql:3306/rizal_heritage"
+      PORT: 4000
+      NODE_ENV: production
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      JWT_SECRET: ${JWT_SECRET:-change-this-to-a-long-random-string}
+      JWT_EXPIRES_IN: "7d"
+    ports:
+      - "4000:4000"
+    volumes:
+      - backend_uploads:/app/uploads
+    networks:
+      - rizal-network
+
+  # One-off container to seed the database with the catalog's dummy data.
+  # Run with: docker compose run --rm seed
+  seed:
+    build:
+      context: ./backend
+      target: build
+    container_name: rizal-heritage-seed
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "mysql://rizal:${MYSQL_PASSWORD:-rizalpassword}@mysql:3306/rizal_heritage"
+    command: sh -c "npx prisma migrate deploy && npx prisma db seed"
+    networks:
+      - rizal-network
+    profiles:
+      - tools
+
+  frontend:
+    build:
+      context: .
+      args:
+        # Baked in at build time, for browser-side auth calls (login,
+        # register). Must be reachable from the USER'S BROWSER, not from
+        # inside Docker — localhost:4000 works here because the backend's
+        # port is published to the host below. Once deployed behind a
+        # domain/reverse proxy, set this to e.g. https://yourdomain.com/api
+        # in your root .env and rebuild.
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
+    container_name: rizal-heritage-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      # "backend" is the service name above — Docker's internal DNS
+      # resolves it to that container's IP on this network. Using
+      # "localhost" here would point at the frontend container itself.
+      # Used server-side only (Server Components fetching products/
+      # collections/gallery), so this is safe to keep internal.
+      API_URL: http://backend:4000
+    ports:
+      - "3000:3000"
+    networks:
+      - rizal-network
+
+  adminer:
+    image: adminer:latest
+    container_name: rizal-heritage-adminer
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    # Consider removing this from production, or putting it behind
+    # its own authenticated Nginx location, since it's a raw DB admin UI.
+    ports:
+      - "8080:8080"
+    networks:
+      - rizal-network
+
+networks:
+  rizal-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  backend_uploads:
