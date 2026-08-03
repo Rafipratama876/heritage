@@ -17,18 +17,18 @@ export default function AdminCollectionsPage() {
   const [deletingSlug, setDeletingSlug] = useState<string | null>(null);
 
   useEffect(() => {
+    function load() {
+      adminFetchCollections()
+        .then(setCollections)
+        .catch((e) => {
+          const message = e instanceof Error ? e.message : "Failed to load collections";
+          setError(message);
+          showToast(message, "error");
+        });
+    }
+    
     load();
   }, []);
-
-  function load() {
-    adminFetchCollections()
-      .then(setCollections)
-      .catch((e) => {
-        const message = e instanceof Error ? e.message : "Failed to load collections";
-        setError(message);
-        showToast(message, "error");
-      });
-  }
 
   async function handleDelete(slug: string, name: string) {
     if (!confirm(`Delete "${name}"? Products in this collection will need reassigning first.`)) return;

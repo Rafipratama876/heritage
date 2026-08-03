@@ -17,18 +17,18 @@ export default function AdminProductsPage() {
   const [deletingSlug, setDeletingSlug] = useState<string | null>(null);
 
   useEffect(() => {
+    function load() {
+      adminFetchProducts()
+        .then(setProducts)
+        .catch((e) => {
+          const message = e instanceof Error ? e.message : "Failed to load products";
+          setError(message);
+          showToast(message, "error");
+        });
+    }
+    
     load();
   }, []);
-
-  function load() {
-    adminFetchProducts()
-      .then(setProducts)
-      .catch((e) => {
-        const message = e instanceof Error ? e.message : "Failed to load products";
-        setError(message);
-        showToast(message, "error");
-      });
-  }
 
   async function handleDelete(slug: string, name: string) {
     if (!confirm(`Delete "${name}"? This can't be undone.`)) return;

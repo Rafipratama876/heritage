@@ -15,20 +15,21 @@ export default function AdminUsersPage() {
   const [busyId, setBusyId] = useState<string | null>(null);
 
   useEffect(() => {
+
+    function load() {
+      const token = readToken();
+      if (!token) return;
+      adminListUsers(token)
+        .then(setUsers)
+        .catch((e) => {
+          const message = e instanceof Error ? e.message : "Failed to load users";
+          setError(message);
+          showToast(message, "error");
+        });
+    }
+    
     load();
   }, []);
-
-  function load() {
-    const token = readToken();
-    if (!token) return;
-    adminListUsers(token)
-      .then(setUsers)
-      .catch((e) => {
-        const message = e instanceof Error ? e.message : "Failed to load users";
-        setError(message);
-        showToast(message, "error");
-      });
-  }
 
   async function handleRoleChange(id: string, role: "CUSTOMER" | "ADMIN") {
     const token = readToken();

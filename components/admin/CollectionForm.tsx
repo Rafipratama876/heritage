@@ -102,7 +102,7 @@ export default function CollectionForm({
           ))}
         </select>
         <p className="text-xs text-muted mt-1.5">
-          e.g. "Songket Palembang" could sit under the parent "Songket and Tenun".
+          e.g. `{"Songket Palembang"}` could sit under the parent `{"Songket and Tenun"}`.
         </p>
       </Field>
       <Field label="Tagline">

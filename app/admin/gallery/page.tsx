@@ -16,10 +16,7 @@ export default function AdminGalleryPage() {
   const [deletingSlug, setDeletingSlug] = useState<string | null>(null);
 
   useEffect(() => {
-    load();
-  }, []);
-
-  function load() {
+    function load() {
     adminFetchGalleryItems()
       .then(setItems)
       .catch((e) => {
@@ -28,6 +25,9 @@ export default function AdminGalleryPage() {
         showToast(message, "error");
       });
   }
+  
+    load();
+  }, []);
 
   async function handleDelete(slug: string, title: string) {
     if (!confirm(`Delete "${title}"?`)) return;
