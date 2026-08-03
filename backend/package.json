@@ -14,6 +14,7 @@
     "docker:start": "prisma migrate deploy && node dist/index.js"
   },
   "dependencies": {
+    "@google-analytics/data": "^4.9.0",
     "@prisma/client": "^5.18.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",

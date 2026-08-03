@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { prisma } from "../lib/prisma";
-import { asyncHandler } from "../utils/asyncHandler";
+import { asyncHandler, ApiError } from "../utils/asyncHandler";
 import { requireAuth, requireAdmin } from "../middleware/auth";
+import { fetchGa4Overview, isGa4Configured } from "../lib/ga4";
 
 const router = Router();
 
@@ -54,6 +55,65 @@ router.get(
       returningUsers,
       onlineWindowMinutes: ONLINE_WINDOW_MINUTES,
     });
+  })
+);
+
+router.get(
+  "/visitors",
+  asyncHandler(async (_req, res) => {
+    const [uniqueVisitorIds, sessionBounds, deviceCounts] = await Promise.all([
+      prisma.pageView.findMany({ distinct: ["visitorId"], select: { visitorId: true } }),
+      prisma.pageView.groupBy({
+        by: ["sessionId"],
+        _min: { createdAt: true },
+        _max: { createdAt: true },
+        _count: { id: true },
+      }),
+      prisma.pageView.groupBy({ by: ["device"], _count: { device: true } }),
+    ]);
+
+    const totalSessions = sessionBounds.length;
+    const pageViews = sessionBounds.reduce((sum, s) => sum + s._count.id, 0);
+
+    const durationsSeconds = sessionBounds.map(
+      (s) => (s._max.createdAt!.getTime() - s._min.createdAt!.getTime()) / 1000
+    );
+    const avgSessionDurationSeconds = durationsSeconds.length
+      ? Math.round(durationsSeconds.reduce((a, b) => a + b, 0) / durationsSeconds.length)
+      : 0;
+
+    const bouncedSessions = sessionBounds.filter((s) => s._count.id === 1).length;
+    const bounceRate = totalSessions ? Math.round((bouncedSessions / totalSessions) * 100) : 0;
+
+    const devices = Object.fromEntries(deviceCounts.map((d) => [d.device, d._count.device]));
+
+    res.json({
+      totalVisitors: totalSessions,
+      uniqueVisitors: uniqueVisitorIds.length,
+      pageViews,
+      sessions: totalSessions,
+      avgSessionDurationSeconds,
+      bounceRate,
+      devices,
+    });
+  })
+);
+
+// GET /api/analytics/ga4 — pulls the same kind of summary metrics as
+// /visitors, but sourced from Google Analytics 4 instead of our own
+// page_views table. Useful once GA4 is set up on the site, since it
+// also gets you country/city data for free (no local GeoIP needed).
+router.get(
+  "/ga4",
+  asyncHandler(async (_req, res) => {
+    if (!isGa4Configured) {
+      throw new ApiError(
+        503,
+        "Google Analytics isn't configured yet — set GA_PROPERTY_ID, GA_CLIENT_EMAIL, and GA_PRIVATE_KEY in the backend's environment."
+      );
+    }
+    const overview = await fetchGa4Overview();
+    res.json(overview);
   })
 );
 

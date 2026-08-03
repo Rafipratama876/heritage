@@ -209,3 +209,21 @@ model WishlistItem {
   @@index([productId])
   @@map("wishlist_items")
 }
+
+// One row per page load, from a lightweight anonymous tracker
+// (components/VisitorTracker.tsx). visitorId is a long-lived id stored
+// in the browser's localStorage; sessionId resets after ~30 minutes of
+// inactivity. No IP address or precise location is stored.
+model PageView {
+  id        String   @id @default(cuid())
+  visitorId String
+  sessionId String
+  path      String
+  device    String
+  createdAt DateTime @default(now())
+
+  @@index([visitorId])
+  @@index([sessionId])
+  @@index([createdAt])
+  @@map("page_views")
+}

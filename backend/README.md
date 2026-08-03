@@ -180,9 +180,10 @@ Every wishlist response looks like:
 | DELETE | `/api/users/:id`       | —                | Can't delete your own account |
 
 ### Analytics (admin only)
-| Method | Path                     | Notes |
-|--------|---------------------------|-------|
-| GET    | `/api/analytics/overview` | Registered-user activity metrics — see below |
+| Method | Path                       | Notes |
+|--------|-----------------------------|-------|
+| GET    | `/api/analytics/overview`  | Registered-user activity metrics — see below |
+| GET    | `/api/analytics/visitors`  | Anonymous site-traffic metrics — see below |
 
 ```json
 {
@@ -198,15 +199,53 @@ Every wishlist response looks like:
 }
 ```
 
-These metrics only cover **registered, logged-in users** — there's no anonymous
-visitor tracking (no "first time visitor" / total site-traffic numbers), since that
-needs a separate analytics system (cookies for guests, a page-view log, etc.).
 `onlineNow` counts users whose `lastSeenAt` is within the last `onlineWindowMinutes`,
 kept fresh by a heartbeat ping:
 
 | Method | Path                  | Auth | Notes |
 |--------|------------------------|------|-------|
 | POST   | `/api/auth/heartbeat`  | user | Updates `lastSeenAt` to now. The frontend calls this once a minute while someone is logged in (see `components/AuthProvider.tsx`). |
+
+`GET /api/analytics/visitors` looks like:
+```json
+{
+  "totalVisitors": 340,
+  "uniqueVisitors": 210,
+  "pageViews": 1204,
+  "sessions": 340,
+  "avgSessionDurationSeconds": 96,
+  "bounceRate": 42,
+  "devices": { "desktop": 180, "mobile": 160 }
+}
+```
+This comes from an anonymous, cookie-free page-view log (`page_views` table): the
+frontend (`components/VisitorTracker.tsx`) pings a public endpoint on every route
+change with a random id it keeps in `localStorage`, no IP address or precise location
+stored. "Total Visitor" and "Session" are currently the same number (both mean
+"a visit") — see the code comment in `backend/src/routes/analytics.ts` if you want to
+change that. Country/city (`Negara/Kota`) isn't implemented — it needs a GeoIP lookup,
+which wasn't set up yet.
+
+| Method | Path         | Auth | Body | Notes |
+|--------|---------------|------|------|-------|
+| POST   | `/api/track` | none | `{ visitorId, sessionId, path, device }` | Public, fire-and-forget from the browser |
+
+### Google Analytics 4 (optional)
+
+`GET /api/analytics/ga4` pulls the same kind of summary from Google Analytics 4 instead
+of our own `page_views` table — same shape as `/visitors`, plus a free top-5-countries
+breakdown (GeoIP isn't set up locally, but GA4 already has this data). Requires three
+env vars (see `backend/.env.example`): `GA_PROPERTY_ID`, `GA_CLIENT_EMAIL`,
+`GA_PRIVATE_KEY` (the last two come from a service account JSON key with Viewer access
+on the GA4 property — see `lib/ga4.ts` for details). Returns `503` with a clear message
+if these aren't set. Data has GA4's usual few-hours processing delay, so it's less
+"live" than the custom `/visitors` endpoint.
+
+The frontend's `components/GoogleAnalytics.tsx` loads the gtag.js snippet using
+`NEXT_PUBLIC_GA_MEASUREMENT_ID` (a separate, public value — not a secret, unlike the
+three above). Automatic pageview tracking is turned off; `components/VisitorTracker.tsx`
+fires pageviews manually instead, so GA4 can skip `/admin` routes the same way our own
+tracking already does.
 
 ## Seeded admin account
 

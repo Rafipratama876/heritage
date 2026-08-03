@@ -6,6 +6,7 @@ import { CartProvider } from "@/components/CartProvider";
 import { WishlistProvider } from "@/components/WishlistProvider";
 import CartDrawer from "@/components/CartDrawer";
 import WishlistDrawer from "@/components/WishlistDrawer";
+import VisitorTracker from "@/components/VisitorTracker";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,6 +14,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>
+            <VisitorTracker />
             {children}
             <CartDrawer />
             <WishlistDrawer />

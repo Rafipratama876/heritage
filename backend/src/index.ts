@@ -14,6 +14,7 @@ import wishlistRoutes from "./routes/wishlist";
 import userRoutes from "./routes/users";
 import uploadRoutes from "./routes/uploads";
 import analyticsRoutes from "./routes/analytics";
+import trackRoutes from "./routes/track";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 
 const app = express();
@@ -48,6 +49,7 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/uploads", uploadRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/track", trackRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

@@ -17,6 +17,11 @@ COPY . .
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
+# Same deal — baked in at build time since it's read by the gtag.js
+# snippet running in the browser (components/GoogleAnalytics.tsx).
+ARG NEXT_PUBLIC_GA_MEASUREMENT_ID
+ENV NEXT_PUBLIC_GA_MEASUREMENT_ID=${NEXT_PUBLIC_GA_MEASUREMENT_ID}
+
 RUN npm run build
 
 # ---- Production ----

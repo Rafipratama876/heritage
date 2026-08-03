@@ -693,6 +693,35 @@ export async function adminFetchAnalytics(token: string): Promise<AnalyticsOverv
   return authFetch<AnalyticsOverview>("/api/analytics/overview", withAuth(token));
 }
 
+export type VisitorInsight = {
+  totalVisitors: number;
+  uniqueVisitors: number;
+  pageViews: number;
+  sessions: number;
+  avgSessionDurationSeconds: number;
+  bounceRate: number;
+  devices: Record<string, number>;
+};
+
+export async function adminFetchVisitorInsight(token: string): Promise<VisitorInsight> {
+  return authFetch<VisitorInsight>("/api/analytics/visitors", withAuth(token));
+}
+
+export type Ga4Overview = {
+  activeUsers: number;
+  sessions: number;
+  pageViews: number;
+  avgSessionDurationSeconds: number;
+  bounceRate: number;
+  devices: Record<string, number>;
+  topCountries: { country: string; activeUsers: number }[];
+  dateRange: string;
+};
+
+export async function adminFetchGa4Overview(token: string): Promise<Ga4Overview> {
+  return authFetch<Ga4Overview>("/api/analytics/ga4", withAuth(token));
+}
+
 // ---- Heartbeat ----
 // Called periodically by AuthProvider while someone is logged in, so
 // the admin dashboard's "online now" count reflects reality.
