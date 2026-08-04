@@ -2,15 +2,33 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { HiX, HiMinus, HiPlus, HiOutlineTrash, HiOutlineShoppingBag } from "react-icons/hi";
 import { FaWhatsapp } from "react-icons/fa";
 import { useCart } from "@/components/CartProvider";
+import { useAuth } from "@/components/AuthProvider";
+import { useToast } from "@/components/ToastProvider";
 import { formatIDR, buildWhatsAppCartLink, cn } from "@/lib/utils";
 
 export default function CartDrawer() {
   const { cart, isLoading, isOpen, closeCart, updateQuantity, removeItem, clear } = useCart();
+  const { isAuthenticated } = useAuth();
+  const { showToast } = useToast();
+  const router = useRouter();
+  const pathname = usePathname();
   const isEmpty = cart.items.length === 0;
+
+  // Checkout (unlike adding to cart as a guest) requires an account — see
+  // WhatsAppOrderButton.tsx for the same gate on the product page.
+  function handleCheckoutClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      showToast("Please log in to check out.", "info");
+      closeCart();
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+    }
+  }
 
   return (
     <AnimatePresence>
@@ -147,6 +165,7 @@ export default function CartDrawer() {
                   href={buildWhatsAppCartLink(cart.items, cart.totalPrice)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={handleCheckoutClick}
                   className="btn-primary w-full !py-4"
                 >
                   <FaWhatsapp className="text-lg" />

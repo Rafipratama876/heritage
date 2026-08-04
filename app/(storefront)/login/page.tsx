@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HiOutlineMail, HiOutlineLockClosed, HiEye, HiEyeOff } from "react-icons/hi";
@@ -18,6 +18,16 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [redirectTo, setRedirectTo] = useState("/products");
+
+  // Read via window.location instead of useSearchParams so this page can
+  // stay statically prerendered (useSearchParams would force a Suspense
+  // boundary here). Set by WhatsAppOrderButton / CartDrawer when a guest
+  // tries to order, so login returns them to what they were doing.
+  useEffect(() => {
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+    if (redirect) setRedirectTo(redirect);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,7 +35,7 @@ export default function LoginPage() {
     setError("");
     try {
       await login(email, password, rememberMe);
-      router.push("/products");
+      router.push(redirectTo);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed. Please try again.");
     } finally {
@@ -42,8 +52,8 @@ export default function LoginPage() {
           <p className="eyebrow mb-3">Customer Access</p>
           <h1 className="font-display text-4xl text-ivory">Login</h1>
           <p className="text-muted mt-3 text-sm">
-            You never need to log in to browse the catalog — this just
-            saves your details for future orders.
+            Browsing the catalog never requires an account — but you&apos;ll
+            need to log in to place an order.
           </p>
         </Reveal>
 
@@ -126,7 +136,10 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-muted mt-8">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-brass hover:text-ivory transition-colors">
+          <Link
+            href={redirectTo === "/products" ? "/register" : `/register?redirect=${encodeURIComponent(redirectTo)}`}
+            className="text-brass hover:text-ivory transition-colors"
+          >
             Create one →
           </Link>
         </p>

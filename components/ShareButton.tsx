@@ -3,16 +3,23 @@
 import { useState } from "react";
 import { HiOutlineShare, HiOutlineLink, HiCheck } from "react-icons/hi";
 import { FaWhatsapp, FaFacebook } from "react-icons/fa";
+import { trackProductEvent } from "@/lib/api";
 
 export default function ShareButton({
+  productId,
   title,
   text,
 }: {
+  productId?: string;
   title: string;
   text?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  function track() {
+    if (productId) trackProductEvent(productId, "SHARE");
+  }
 
   async function handleShareClick() {
     const url = window.location.href;
@@ -20,6 +27,7 @@ export default function ShareButton({
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share({ title, text, url });
+        track();
       } catch {
         // Person cancelled the native share sheet — nothing to do.
       }
@@ -32,6 +40,7 @@ export default function ShareButton({
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
+      track();
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // Clipboard access denied — link is still visible in the address bar.
@@ -65,6 +74,7 @@ export default function ShareButton({
               href={shareUrls().whatsapp}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={track}
               className="flex items-center gap-3 px-4 py-2.5 text-sm text-ivory/80 hover:bg-surface hover:text-brass transition-colors"
             >
               <FaWhatsapp /> WhatsApp
@@ -73,6 +83,7 @@ export default function ShareButton({
               href={shareUrls().facebook}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={track}
               className="flex items-center gap-3 px-4 py-2.5 text-sm text-ivory/80 hover:bg-surface hover:text-brass transition-colors"
             >
               <FaFacebook /> Facebook

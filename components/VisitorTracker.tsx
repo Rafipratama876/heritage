@@ -3,23 +3,14 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { BROWSER_API_URL } from "@/lib/api";
+import { getVisitorId } from "@/lib/visitor";
 
-const VISITOR_ID_KEY = "rizal_heritage_visitor_id";
 const SESSION_ID_KEY = "rizal_heritage_session_id";
 const SESSION_LAST_ACTIVITY_KEY = "rizal_heritage_session_last_activity";
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes of inactivity = new session
 
 function randomId(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
-}
-
-function getVisitorId(): string {
-  let id = localStorage.getItem(VISITOR_ID_KEY);
-  if (!id) {
-    id = randomId();
-    localStorage.setItem(VISITOR_ID_KEY, id);
-  }
-  return id;
 }
 
 function getSessionId(): string {
@@ -50,7 +41,7 @@ export default function VisitorTracker() {
     if (pathname.startsWith("/admin")) return; // don't track our own admin usage
 
     const payload = {
-      visitorId: getVisitorId(),
+      visitorId: getVisitorId() as string,
       sessionId: getSessionId(),
       path: pathname,
       device: getDevice(),

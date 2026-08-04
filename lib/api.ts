@@ -1,4 +1,5 @@
 import { Product, Collection, GalleryItem, Category, AuthUser, Cart } from "@/types";
+import { getVisitorId } from "@/lib/visitor";
 
 // Used by Server Components (products, collections, gallery) — these run
 // inside the Docker container, so this must resolve on Docker's internal
@@ -322,6 +323,32 @@ export async function searchProducts(query: string, limit = 6): Promise<Product[
   const params = new URLSearchParams({ search: trimmed, pageSize: String(limit) });
   const data = await authFetch<{ items: ApiProduct[] }>(`/api/products?${params.toString()}`);
   return data.items.map(mapProduct);
+}
+
+// Fire-and-forget: logs a search keyword and how many products it
+// matched, to power the admin "Search Insight" dashboard. Never surfaced
+// to the visitor if it fails.
+export function trackSearch(query: string, resultsCount: number): void {
+  const trimmed = query.trim();
+  if (!trimmed) return;
+  fetch(`${BROWSER_API_URL}/api/track/search`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query: trimmed, resultsCount }),
+    keepalive: true,
+  }).catch(() => {});
+}
+
+// Fire-and-forget: logs a product page view / WhatsApp order click /
+// share click, to power the admin "Product Insight" dashboard. Called
+// from the product detail page, WhatsAppOrderButton, and ShareButton.
+export function trackProductEvent(productId: string, type: "VIEW" | "WA_CLICK" | "SHARE"): void {
+  fetch(`${BROWSER_API_URL}/api/track/product`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ productId, type, visitorId: getVisitorId() ?? undefined }),
+    keepalive: true,
+  }).catch(() => {});
 }
 
 // ---- Cart ----
@@ -720,6 +747,39 @@ export type Ga4Overview = {
 
 export async function adminFetchGa4Overview(token: string): Promise<Ga4Overview> {
   return authFetch<Ga4Overview>("/api/analytics/ga4", withAuth(token));
+}
+
+export type BehaviorInsight = {
+  peakHours: { hour: number; count: number }[];
+  newVisitors: number;
+  returningVisitors: number;
+};
+
+export async function adminFetchBehaviorInsight(token: string): Promise<BehaviorInsight> {
+  return authFetch<BehaviorInsight>("/api/analytics/behavior", withAuth(token));
+}
+
+export type SearchInsight = {
+  topKeywords: { query: string; count: number }[];
+  zeroResultKeywords: { query: string; count: number }[];
+};
+
+export async function adminFetchSearchInsight(token: string): Promise<SearchInsight> {
+  return authFetch<SearchInsight>("/api/analytics/search", withAuth(token));
+}
+
+export type ProductInsight = {
+  totalViews: number;
+  totalWaClicks: number;
+  totalShares: number;
+  conversionRate: number;
+  repeatViewCount: number;
+  topViewed: { product: { id: string; name: string; slug: string } | null; count: number }[];
+  topWishlisted: { product: { id: string; name: string; slug: string } | null; count: number }[];
+};
+
+export async function adminFetchProductInsight(token: string): Promise<ProductInsight> {
+  return authFetch<ProductInsight>("/api/analytics/products", withAuth(token));
 }
 
 // ---- Heartbeat ----

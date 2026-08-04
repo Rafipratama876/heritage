@@ -34,6 +34,12 @@ enum Role {
   ADMIN
 }
 
+enum ProductEventType {
+  VIEW
+  WA_CLICK
+  SHARE
+}
+
 model User {
   id            String         @id @default(cuid())
   name          String
@@ -99,6 +105,7 @@ model Product {
   wishlistItems    WishlistItem[]
   categories       ProductCategory[]
   collections      ProductCollection[]
+  events           ProductEvent[]
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
 
@@ -226,4 +233,38 @@ model PageView {
   @@index([sessionId])
   @@index([createdAt])
   @@map("page_views")
+}
+
+// One row per search made through the navbar search overlay
+// (components/SearchOverlay.tsx). Powers the admin "Search Insight"
+// dashboard — top keywords and searches that returned zero results.
+model SearchQuery {
+  id            String   @id @default(cuid())
+  query         String
+  resultsCount  Int
+  createdAt     DateTime @default(now())
+
+  @@index([query])
+  @@index([createdAt])
+  @@map("search_queries")
+}
+
+// One row per product-related event from the storefront: opening a
+// product's detail page (VIEW), clicking "Order via WhatsApp" (WA_CLICK),
+// or clicking "Share" (SHARE). visitorId is the same anonymous id used by
+// PageView, so repeat views by the same person can be detected. Powers
+// the admin "Product Insight" dashboard.
+model ProductEvent {
+  id        String           @id @default(cuid())
+  product   Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  type      ProductEventType
+  visitorId String?
+  createdAt DateTime         @default(now())
+
+  @@index([productId])
+  @@index([type])
+  @@index([visitorId])
+  @@index([createdAt])
+  @@map("product_events")
 }

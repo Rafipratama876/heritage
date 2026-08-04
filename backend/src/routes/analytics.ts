@@ -99,6 +99,142 @@ router.get(
   })
 );
 
+// GET /api/analytics/behavior — powers the admin "Customer Behavior
+// Insight" table: jam aktif user (which hours of the day get the most
+// page views) and new vs returning visitor, both derived from the same
+// anonymous PageView rows used by /visitors.
+router.get(
+  "/behavior",
+  asyncHandler(async (_req, res) => {
+    const [hourRows, visitorSessions] = await Promise.all([
+      prisma.$queryRaw<{ hour: bigint; count: bigint }[]>`
+        SELECT HOUR(createdAt) as hour, COUNT(*) as count
+        FROM page_views
+        GROUP BY hour
+        ORDER BY hour ASC
+      `,
+      prisma.pageView.groupBy({ by: ["visitorId", "sessionId"] }),
+    ]);
+
+    const peakHours = hourRows.map((r) => ({ hour: Number(r.hour), count: Number(r.count) }));
+
+    const sessionCountByVisitor = new Map<string, number>();
+    for (const row of visitorSessions) {
+      sessionCountByVisitor.set(row.visitorId, (sessionCountByVisitor.get(row.visitorId) ?? 0) + 1);
+    }
+    let newVisitors = 0;
+    let returningVisitors = 0;
+    for (const sessionCount of sessionCountByVisitor.values()) {
+      if (sessionCount > 1) returningVisitors++;
+      else newVisitors++;
+    }
+
+    res.json({ peakHours, newVisitors, returningVisitors });
+  })
+);
+
+// GET /api/analytics/search — powers the admin "Search Insight" table:
+// most searched keywords and keywords that returned zero products
+// (a signal for products worth adding to the catalog). Sourced from
+// SearchQuery rows logged by POST /api/track/search.
+router.get(
+  "/search",
+  asyncHandler(async (_req, res) => {
+    const [topKeywordsRaw, zeroResultKeywordsRaw] = await Promise.all([
+      prisma.searchQuery.groupBy({
+        by: ["query"],
+        _count: { query: true },
+        orderBy: { _count: { query: "desc" } },
+        take: 10,
+      }),
+      prisma.searchQuery.groupBy({
+        by: ["query"],
+        where: { resultsCount: 0 },
+        _count: { query: true },
+        orderBy: { _count: { query: "desc" } },
+        take: 10,
+      }),
+    ]);
+
+    res.json({
+      topKeywords: topKeywordsRaw.map((r) => ({ query: r.query, count: r._count.query })),
+      zeroResultKeywords: zeroResultKeywordsRaw.map((r) => ({ query: r.query, count: r._count.query })),
+    });
+  })
+);
+
+// GET /api/analytics/products — powers the admin "Product Insight"
+// table: view counts, top-viewed/top-wishlisted ranking, WhatsApp order
+// clicks, share clicks, view-to-order conversion rate, and repeat views.
+// Sourced from ProductEvent (logged by POST /api/track/product) and the
+// existing WishlistItem table.
+router.get(
+  "/products",
+  asyncHandler(async (_req, res) => {
+    const [
+      totalViews,
+      totalWaClicks,
+      totalShares,
+      topViewedRaw,
+      topWishlistedRaw,
+      repeatViewGroups,
+    ] = await Promise.all([
+      prisma.productEvent.count({ where: { type: "VIEW" } }),
+      prisma.productEvent.count({ where: { type: "WA_CLICK" } }),
+      prisma.productEvent.count({ where: { type: "SHARE" } }),
+      prisma.productEvent.groupBy({
+        by: ["productId"],
+        where: { type: "VIEW" },
+        _count: { productId: true },
+        orderBy: { _count: { productId: "desc" } },
+        take: 5,
+      }),
+      prisma.wishlistItem.groupBy({
+        by: ["productId"],
+        _count: { productId: true },
+        orderBy: { _count: { productId: "desc" } },
+        take: 5,
+      }),
+      prisma.productEvent.groupBy({
+        by: ["visitorId", "productId"],
+        where: { type: "VIEW", visitorId: { not: null } },
+        _count: { _all: true },
+      }),
+    ]);
+
+    const productIds = Array.from(
+      new Set([...topViewedRaw.map((r) => r.productId), ...topWishlistedRaw.map((r) => r.productId)])
+    );
+    const products = await prisma.product.findMany({
+      where: { id: { in: productIds } },
+      select: { id: true, name: true, slug: true },
+    });
+    const productById = new Map(products.map((p) => [p.id, p]));
+
+    const topViewed = topViewedRaw.map((r) => ({
+      product: productById.get(r.productId) ?? null,
+      count: r._count.productId,
+    }));
+    const topWishlisted = topWishlistedRaw.map((r) => ({
+      product: productById.get(r.productId) ?? null,
+      count: r._count.productId,
+    }));
+
+    const repeatViewCount = repeatViewGroups.filter((g) => g._count._all > 1).length;
+    const conversionRate = totalViews > 0 ? Math.round((totalWaClicks / totalViews) * 100) : 0;
+
+    res.json({
+      totalViews,
+      totalWaClicks,
+      totalShares,
+      conversionRate,
+      repeatViewCount,
+      topViewed,
+      topWishlisted,
+    });
+  })
+);
+
 // GET /api/analytics/ga4 — pulls the same kind of summary metrics as
 // /visitors, but sourced from Google Analytics 4 instead of our own
 // page_views table. Useful once GA4 is set up on the site, since it

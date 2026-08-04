@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { HiX, HiOutlineSearch } from "react-icons/hi";
-import { searchProducts } from "@/lib/api";
+import { searchProducts, trackSearch } from "@/lib/api";
 import { useDebounce } from "@/hooks/useDebounce";
 import { formatIDR } from "@/lib/utils";
 import type { Product } from "@/types";
@@ -44,6 +44,7 @@ export default function SearchOverlay({
     searchProducts(debouncedQuery)
       .then((products) => {
         if (!cancelled) setResults(products);
+        trackSearch(debouncedQuery, products.length);
       })
       .catch(() => {
         if (!cancelled) setResults([]);

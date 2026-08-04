@@ -6,6 +6,7 @@ import ProductGallery from "@/components/ProductGallery";
 import WhatsAppOrderButton from "@/components/WhatsAppOrderButton";
 import AddToCartForm from "@/components/AddToCartForm";
 import ShareButton from "@/components/ShareButton";
+import ProductViewTracker from "@/components/ProductViewTracker";
 import ProductCard from "@/components/ProductCard";
 import SectionHeading from "@/components/SectionHeading";
 import { getProduct, getRelatedProducts } from "@/lib/products";
@@ -66,6 +67,7 @@ export default async function ProductDetailPage({
 
   return (
     <div className="container-content pt-32 pb-24">
+      <ProductViewTracker productId={product.id} />
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
@@ -103,9 +105,9 @@ export default async function ProductDetailPage({
             <AddToCartForm product={product} />
             <div className="flex items-center gap-3">
               <div className="flex-1">
-                <WhatsAppOrderButton productName={product.name} />
+                <WhatsAppOrderButton productId={product.id} productName={product.name} />
               </div>
-              <ShareButton title={product.name} text={product.shortDescription} />
+              <ShareButton productId={product.id} title={product.name} text={product.shortDescription} />
             </div>
           </div>
 

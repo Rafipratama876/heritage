@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -26,6 +26,14 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [redirectTo, setRedirectTo] = useState("/products");
+
+  // See login/page.tsx for why this reads window.location directly
+  // instead of useSearchParams.
+  useEffect(() => {
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+    if (redirect) setRedirectTo(redirect);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -38,7 +46,7 @@ export default function RegisterPage() {
         password,
         phone: phone.trim() || undefined,
       });
-      router.push("/products");
+      router.push(redirectTo);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed. Please try again.");
     } finally {
@@ -55,8 +63,8 @@ export default function RegisterPage() {
           <p className="eyebrow mb-3">Customer Access</p>
           <h1 className="font-display text-4xl text-ivory">Create Account</h1>
           <p className="text-muted mt-3 text-sm">
-            Register to save your details for future orders. Browsing the
-            catalog never requires an account.
+            Create an account to place orders. Browsing the catalog never
+            requires one.
           </p>
         </Reveal>
 
@@ -161,7 +169,10 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm text-muted mt-8">
           Already have an account?{" "}
-          <Link href="/login" className="text-brass hover:text-ivory transition-colors">
+          <Link
+            href={redirectTo === "/products" ? "/login" : `/login?redirect=${encodeURIComponent(redirectTo)}`}
+            className="text-brass hover:text-ivory transition-colors"
+          >
             Log in →
           </Link>
         </p>
