@@ -704,6 +704,14 @@ export async function adminUploadImages(token: string, files: File[]): Promise<s
 
 // ---- Admin: Analytics ----
 
+// Period grouping for the /admin/insight charts — mirrors the backend's
+// GroupBy type (backend/src/lib/timeseries.ts).
+export type InsightGroupBy = "day" | "week" | "month";
+
+function groupByQuery(groupBy?: InsightGroupBy): string {
+  return groupBy ? `?groupBy=${groupBy}` : "";
+}
+
 export type AnalyticsOverview = {
   totalUsers: number;
   newUsersToday: number;
@@ -714,10 +722,14 @@ export type AnalyticsOverview = {
   loginsToday: number;
   returningUsers: number;
   onlineWindowMinutes: number;
+  timeseries: { bucket: string; newUsers: number; logins: number }[];
 };
 
-export async function adminFetchAnalytics(token: string): Promise<AnalyticsOverview> {
-  return authFetch<AnalyticsOverview>("/api/analytics/overview", withAuth(token));
+export async function adminFetchAnalytics(
+  token: string,
+  groupBy?: InsightGroupBy
+): Promise<AnalyticsOverview> {
+  return authFetch<AnalyticsOverview>(`/api/analytics/overview${groupByQuery(groupBy)}`, withAuth(token));
 }
 
 export type VisitorInsight = {
@@ -728,10 +740,14 @@ export type VisitorInsight = {
   avgSessionDurationSeconds: number;
   bounceRate: number;
   devices: Record<string, number>;
+  timeseries: { bucket: string; pageViews: number; sessions: number }[];
 };
 
-export async function adminFetchVisitorInsight(token: string): Promise<VisitorInsight> {
-  return authFetch<VisitorInsight>("/api/analytics/visitors", withAuth(token));
+export async function adminFetchVisitorInsight(
+  token: string,
+  groupBy?: InsightGroupBy
+): Promise<VisitorInsight> {
+  return authFetch<VisitorInsight>(`/api/analytics/visitors${groupByQuery(groupBy)}`, withAuth(token));
 }
 
 export type Ga4Overview = {
@@ -762,10 +778,14 @@ export async function adminFetchBehaviorInsight(token: string): Promise<Behavior
 export type SearchInsight = {
   topKeywords: { query: string; count: number }[];
   zeroResultKeywords: { query: string; count: number }[];
+  timeseries: { bucket: string; count: number }[];
 };
 
-export async function adminFetchSearchInsight(token: string): Promise<SearchInsight> {
-  return authFetch<SearchInsight>("/api/analytics/search", withAuth(token));
+export async function adminFetchSearchInsight(
+  token: string,
+  groupBy?: InsightGroupBy
+): Promise<SearchInsight> {
+  return authFetch<SearchInsight>(`/api/analytics/search${groupByQuery(groupBy)}`, withAuth(token));
 }
 
 export type ProductInsight = {
@@ -776,10 +796,14 @@ export type ProductInsight = {
   repeatViewCount: number;
   topViewed: { product: { id: string; name: string; slug: string } | null; count: number }[];
   topWishlisted: { product: { id: string; name: string; slug: string } | null; count: number }[];
+  timeseries: { bucket: string; views: number; waClicks: number; shares: number }[];
 };
 
-export async function adminFetchProductInsight(token: string): Promise<ProductInsight> {
-  return authFetch<ProductInsight>("/api/analytics/products", withAuth(token));
+export async function adminFetchProductInsight(
+  token: string,
+  groupBy?: InsightGroupBy
+): Promise<ProductInsight> {
+  return authFetch<ProductInsight>(`/api/analytics/products${groupByQuery(groupBy)}`, withAuth(token));
 }
 
 // ---- Heartbeat ----
