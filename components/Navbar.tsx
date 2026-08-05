@@ -30,6 +30,12 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // Bumped every time the menu opens so the panel gets a brand-new DOM node
+  // (via `key`) instead of React reusing the old one. iOS WebKit has been
+  // seen failing to repaint a reused compositing layer the 2nd+ time an
+  // animated `position: fixed` element re-appears — the first open works,
+  // later ones show an empty panel. A fresh node sidesteps that.
+  const [menuInstance, setMenuInstance] = useState(0);
 
   useEffect(() => {
     setMounted(true);
@@ -189,7 +195,12 @@ export default function Navbar() {
           <button
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
+            onClick={() =>
+              setOpen((v) => {
+                if (!v) setMenuInstance((n) => n + 1);
+                return !v;
+              })
+            }
             className="lg:hidden text-ivory text-2xl p-2 -mr-2"
           >
             {open ? <HiX /> : <HiMenu />}
@@ -212,6 +223,7 @@ export default function Navbar() {
           <AnimatePresence>
             {open && (
               <motion.div
+                key={menuInstance}
                 initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
