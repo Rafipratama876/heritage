@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { HiMenu, HiX, HiOutlineShoppingBag, HiOutlineSearch, HiOutlineHeart } from "react-icons/hi";
 import { cn } from "@/lib/utils";
@@ -28,6 +29,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -191,65 +197,79 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="lg:hidden bg-canvas border-b border-line overflow-hidden"
-          >
-            <ul className="container-content flex flex-col py-4">
-              {NAV_LINKS.map((link) => {
-                const active =
-                  link.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(link.href);
-                return (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className={cn(
-                        "block py-3 text-base border-b border-line/60",
-                        active ? "text-brass" : "text-ivory/85",
-                      )}
-                    >
-                      {link.label}
-                    </Link>
+      {mounted &&
+        createPortal(
+          // Rendered via a portal straight into <body>, deliberately outside
+          // the <header>. iOS WebKit (this affects both Safari and Chrome on
+          // iOS — Apple requires every iOS browser to run on WebKit) has a
+          // long-standing bug where content that appears/changes inside an
+          // ancestor using `backdrop-filter` (this header does) fails to
+          // repaint correctly: the layout is right — taps still land on the
+          // correct link — but the text never gets painted, so the menu
+          // looks like it "rolls back up" empty right after opening.
+          // Moving the panel out of the blurred header's subtree sidesteps
+          // that compositing bug entirely.
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="lg:hidden fixed top-20 inset-x-0 z-50 bg-canvas border-b border-line max-h-[calc(100vh-5rem)] overflow-y-auto"
+              >
+                <ul className="container-content flex flex-col py-4">
+                  {NAV_LINKS.map((link) => {
+                    const active =
+                      link.href === "/"
+                        ? pathname === "/"
+                        : pathname.startsWith(link.href);
+                    return (
+                      <li key={link.href}>
+                        <Link
+                          href={link.href}
+                          className={cn(
+                            "block py-3 text-base border-b border-line/60",
+                            active ? "text-brass" : "text-ivory/85",
+                          )}
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                  <li>
+                    {!isLoading && user ? (
+                      <button
+                        type="button"
+                        onClick={logout}
+                        className="block py-3 text-base text-ivory/85 w-full text-left"
+                      >
+                        Logout ({user.name.split(" ")[0]})
+                      </button>
+                    ) : (
+                      <>
+                        <Link
+                          href="/login"
+                          className="block py-3 text-base text-ivory/85"
+                        >
+                          Login
+                        </Link>
+                        <Link
+                          href="/register"
+                          className="block py-3 text-base text-ivory/85"
+                        >
+                          Register
+                        </Link>
+                      </>
+                    )}
                   </li>
-                );
-              })}
-              <li>
-                {!isLoading && user ? (
-                  <button
-                    type="button"
-                    onClick={logout}
-                    className="block py-3 text-base text-ivory/85 w-full text-left"
-                  >
-                    Logout ({user.name.split(" ")[0]})
-                  </button>
-                ) : (
-                  <>
-                    <Link
-                      href="/login"
-                      className="block py-3 text-base text-ivory/85"
-                    >
-                      Login
-                    </Link>
-                    <Link
-                      href="/register"
-                      className="block py-3 text-base text-ivory/85"
-                    >
-                      Register
-                    </Link>
-                  </>
-                )}
-              </li>
-            </ul>
-          </motion.div>
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
 
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
