@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { HiMenu, HiX, HiOutlineShoppingBag, HiOutlineSearch, HiOutlineHeart } from "react-icons/hi";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/AuthProvider";
@@ -30,12 +30,6 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  // Bumped every time the menu opens so the panel gets a brand-new DOM node
-  // (via `key`) instead of React reusing the old one. iOS WebKit has been
-  // seen failing to repaint a reused compositing layer the 2nd+ time an
-  // animated `position: fixed` element re-appears — the first open works,
-  // later ones show an empty panel. A fresh node sidesteps that.
-  const [menuInstance, setMenuInstance] = useState(0);
 
   useEffect(() => {
     setMounted(true);
@@ -195,12 +189,7 @@ export default function Navbar() {
           <button
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
-            onClick={() =>
-              setOpen((v) => {
-                if (!v) setMenuInstance((n) => n + 1);
-                return !v;
-              })
-            }
+            onClick={() => setOpen((v) => !v)}
             className="lg:hidden text-ivory text-2xl p-2 -mr-2"
           >
             {open ? <HiX /> : <HiMenu />}
@@ -211,75 +200,80 @@ export default function Navbar() {
       {mounted &&
         createPortal(
           // Rendered via a portal straight into <body>, deliberately outside
-          // the <header>. iOS WebKit (this affects both Safari and Chrome on
-          // iOS — Apple requires every iOS browser to run on WebKit) has a
-          // long-standing bug where content that appears/changes inside an
-          // ancestor using `backdrop-filter` (this header does) fails to
-          // repaint correctly: the layout is right — taps still land on the
-          // correct link — but the text never gets painted, so the menu
-          // looks like it "rolls back up" empty right after opening.
-          // Moving the panel out of the blurred header's subtree sidesteps
-          // that compositing bug entirely.
-          <AnimatePresence>
-            {open && (
-              <motion.div
-                key={menuInstance}
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="lg:hidden fixed top-20 inset-x-0 z-50 bg-canvas border-b border-line max-h-[calc(100vh-5rem)] overflow-y-auto"
-              >
-                <ul className="container-content flex flex-col py-4">
-                  {NAV_LINKS.map((link) => {
-                    const active =
-                      link.href === "/"
-                        ? pathname === "/"
-                        : pathname.startsWith(link.href);
-                    return (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className={cn(
-                            "block py-3 text-base border-b border-line/60",
-                            active ? "text-brass" : "text-ivory/85",
-                          )}
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                  <li>
-                    {!isLoading && user ? (
-                      <button
-                        type="button"
-                        onClick={logout}
-                        className="block py-3 text-base text-ivory/85 w-full text-left"
-                      >
-                        Logout ({user.name.split(" ")[0]})
-                      </button>
-                    ) : (
-                      <>
-                        <Link
-                          href="/login"
-                          className="block py-3 text-base text-ivory/85"
-                        >
-                          Login
-                        </Link>
-                        <Link
-                          href="/register"
-                          className="block py-3 text-base text-ivory/85"
-                        >
-                          Register
-                        </Link>
-                      </>
-                    )}
-                  </li>
-                </ul>
-              </motion.div>
+          // the <header>, whose `backdrop-filter` has been a source of
+          // WebKit repaint glitches for content nested inside it.
+          //
+          // The panel is *always* mounted (never conditionally
+          // added/removed) and purely CSS-driven — opacity/transform
+          // classes toggle off `open` — instead of using Framer Motion's
+          // mount-triggered `initial`/`animate`. That mount-triggered
+          // animation turned out to be the real bug: in production it would
+          // sometimes get stuck at its `initial` style (`opacity: 0`)
+          // forever, so the panel was fully laid out and clickable but
+          // never actually painted. A plain CSS transition on an
+          // already-mounted element has no such "did the animation actually
+          // start" failure mode.
+          <div
+            className={cn(
+              "lg:hidden fixed top-20 inset-x-0 z-50 bg-canvas border-b border-line max-h-[calc(100vh-5rem)] overflow-y-auto transition-all duration-200 ease-out",
+              open
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 -translate-y-2 pointer-events-none",
             )}
-          </AnimatePresence>,
+            aria-hidden={!open}
+          >
+            <ul className="container-content flex flex-col py-4">
+              {NAV_LINKS.map((link) => {
+                const active =
+                  link.href === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(link.href);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      tabIndex={open ? undefined : -1}
+                      className={cn(
+                        "block py-3 text-base border-b border-line/60",
+                        active ? "text-brass" : "text-ivory/85",
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+              <li>
+                {!isLoading && user ? (
+                  <button
+                    type="button"
+                    tabIndex={open ? undefined : -1}
+                    onClick={logout}
+                    className="block py-3 text-base text-ivory/85 w-full text-left"
+                  >
+                    Logout ({user.name.split(" ")[0]})
+                  </button>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      tabIndex={open ? undefined : -1}
+                      className="block py-3 text-base text-ivory/85"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      href="/register"
+                      tabIndex={open ? undefined : -1}
+                      className="block py-3 text-base text-ivory/85"
+                    >
+                      Register
+                    </Link>
+                  </>
+                )}
+              </li>
+            </ul>
+          </div>,
           document.body,
         )}
 
