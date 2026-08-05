@@ -9,6 +9,7 @@ import {
   HiOutlineCollection,
   HiOutlinePhotograph,
   HiOutlineUsers,
+  HiOutlineChartBar,
   HiOutlineLogout,
   HiOutlineExternalLink,
 } from "react-icons/hi";
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { href: "/admin/collections", label: "Collections", icon: HiOutlineCollection },
   { href: "/admin/gallery", label: "Gallery", icon: HiOutlinePhotograph },
   { href: "/admin/users", label: "Users", icon: HiOutlineUsers },
+  { href: "/admin/insight", label: "Insight", icon: HiOutlineChartBar },
 ];
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {

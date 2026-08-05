@@ -3,6 +3,7 @@ import { prisma } from "../lib/prisma";
 import { asyncHandler, ApiError } from "../utils/asyncHandler";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 import { fetchGa4Overview, isGa4Configured } from "../lib/ga4";
+import { bucketExpr, fillBuckets, generateBuckets, parseGroupBy, rangeStart } from "../lib/timeseries";
 
 const router = Router();
 
@@ -12,12 +13,17 @@ const ONLINE_WINDOW_MINUTES = 5;
 
 router.get(
   "/overview",
-  asyncHandler(async (_req, res) => {
+  asyncHandler(async (req, res) => {
     const now = new Date();
     const startOfToday = new Date(now);
     startOfToday.setHours(0, 0, 0, 0);
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     const onlineSince = new Date(now.getTime() - ONLINE_WINDOW_MINUTES * 60 * 1000);
+    const groupBy = parseGroupBy(req.query.groupBy);
+    const from = rangeStart(groupBy);
+    const buckets = generateBuckets(groupBy);
+    const newUsersExpr = bucketExpr("createdAt", groupBy);
+    const loginsExpr = bucketExpr("createdAt", groupBy);
 
     const [
       totalUsers,
@@ -28,6 +34,8 @@ router.get(
       totalLogins,
       loginsToday,
       loginCountsByUser,
+      newUsersRows,
+      loginRows,
     ] = await Promise.all([
       prisma.user.count(),
       prisma.user.count({ where: { createdAt: { gte: startOfToday } } }),
@@ -40,9 +48,25 @@ router.get(
         by: ["userId"],
         _count: { userId: true },
       }),
+      prisma.$queryRawUnsafe<{ bucket: string; count: bigint }[]>(
+        `SELECT ${newUsersExpr} as bucket, COUNT(*) as count FROM users WHERE createdAt >= ? GROUP BY bucket`,
+        from
+      ),
+      prisma.$queryRawUnsafe<{ bucket: string; count: bigint }[]>(
+        `SELECT ${loginsExpr} as bucket, COUNT(*) as count FROM login_events WHERE createdAt >= ? GROUP BY bucket`,
+        from
+      ),
     ]);
 
     const returningUsers = loginCountsByUser.filter((row) => row._count.userId > 1).length;
+
+    const newUsersByBucket = new Map(newUsersRows.map((r) => [r.bucket, { newUsers: Number(r.count) }]));
+    const loginsByBucket = new Map(loginRows.map((r) => [r.bucket, { logins: Number(r.count) }]));
+    const timeseries = buckets.map((bucket) => ({
+      bucket,
+      newUsers: newUsersByBucket.get(bucket)?.newUsers ?? 0,
+      logins: loginsByBucket.get(bucket)?.logins ?? 0,
+    }));
 
     res.json({
       totalUsers,
@@ -54,14 +78,20 @@ router.get(
       loginsToday,
       returningUsers,
       onlineWindowMinutes: ONLINE_WINDOW_MINUTES,
+      timeseries,
     });
   })
 );
 
 router.get(
   "/visitors",
-  asyncHandler(async (_req, res) => {
-    const [uniqueVisitorIds, sessionBounds, deviceCounts] = await Promise.all([
+  asyncHandler(async (req, res) => {
+    const groupBy = parseGroupBy(req.query.groupBy);
+    const from = rangeStart(groupBy);
+    const buckets = generateBuckets(groupBy);
+    const bucket = bucketExpr("createdAt", groupBy);
+
+    const [uniqueVisitorIds, sessionBounds, deviceCounts, timeseriesRows] = await Promise.all([
       prisma.pageView.findMany({ distinct: ["visitorId"], select: { visitorId: true } }),
       prisma.pageView.groupBy({
         by: ["sessionId"],
@@ -70,6 +100,11 @@ router.get(
         _count: { id: true },
       }),
       prisma.pageView.groupBy({ by: ["device"], _count: { device: true } }),
+      prisma.$queryRawUnsafe<{ bucket: string; pageViews: bigint; sessions: bigint }[]>(
+        `SELECT ${bucket} as bucket, COUNT(*) as pageViews, COUNT(DISTINCT sessionId) as sessions
+         FROM page_views WHERE createdAt >= ? GROUP BY bucket`,
+        from
+      ),
     ]);
 
     const totalSessions = sessionBounds.length;
@@ -87,6 +122,11 @@ router.get(
 
     const devices = Object.fromEntries(deviceCounts.map((d) => [d.device, d._count.device]));
 
+    const rowsByBucket = new Map(
+      timeseriesRows.map((r) => [r.bucket, { pageViews: Number(r.pageViews), sessions: Number(r.sessions) }])
+    );
+    const timeseries = fillBuckets(buckets, rowsByBucket, { pageViews: 0, sessions: 0 });
+
     res.json({
       totalVisitors: totalSessions,
       uniqueVisitors: uniqueVisitorIds.length,
@@ -95,6 +135,7 @@ router.get(
       avgSessionDurationSeconds,
       bounceRate,
       devices,
+      timeseries,
     });
   })
 );
@@ -139,8 +180,13 @@ router.get(
 // SearchQuery rows logged by POST /api/track/search.
 router.get(
   "/search",
-  asyncHandler(async (_req, res) => {
-    const [topKeywordsRaw, zeroResultKeywordsRaw] = await Promise.all([
+  asyncHandler(async (req, res) => {
+    const groupBy = parseGroupBy(req.query.groupBy);
+    const from = rangeStart(groupBy);
+    const buckets = generateBuckets(groupBy);
+    const bucket = bucketExpr("createdAt", groupBy);
+
+    const [topKeywordsRaw, zeroResultKeywordsRaw, timeseriesRows] = await Promise.all([
       prisma.searchQuery.groupBy({
         by: ["query"],
         _count: { query: true },
@@ -154,11 +200,19 @@ router.get(
         orderBy: { _count: { query: "desc" } },
         take: 10,
       }),
+      prisma.$queryRawUnsafe<{ bucket: string; count: bigint }[]>(
+        `SELECT ${bucket} as bucket, COUNT(*) as count FROM search_queries WHERE createdAt >= ? GROUP BY bucket`,
+        from
+      ),
     ]);
+
+    const rowsByBucket = new Map(timeseriesRows.map((r) => [r.bucket, { count: Number(r.count) }]));
+    const timeseries = fillBuckets(buckets, rowsByBucket, { count: 0 });
 
     res.json({
       topKeywords: topKeywordsRaw.map((r) => ({ query: r.query, count: r._count.query })),
       zeroResultKeywords: zeroResultKeywordsRaw.map((r) => ({ query: r.query, count: r._count.query })),
+      timeseries,
     });
   })
 );
@@ -170,7 +224,12 @@ router.get(
 // existing WishlistItem table.
 router.get(
   "/products",
-  asyncHandler(async (_req, res) => {
+  asyncHandler(async (req, res) => {
+    const groupBy = parseGroupBy(req.query.groupBy);
+    const from = rangeStart(groupBy);
+    const buckets = generateBuckets(groupBy);
+    const bucket = bucketExpr("createdAt", groupBy);
+
     const [
       totalViews,
       totalWaClicks,
@@ -178,6 +237,7 @@ router.get(
       topViewedRaw,
       topWishlistedRaw,
       repeatViewGroups,
+      timeseriesRows,
     ] = await Promise.all([
       prisma.productEvent.count({ where: { type: "VIEW" } }),
       prisma.productEvent.count({ where: { type: "WA_CLICK" } }),
@@ -200,6 +260,14 @@ router.get(
         where: { type: "VIEW", visitorId: { not: null } },
         _count: { _all: true },
       }),
+      prisma.$queryRawUnsafe<{ bucket: string; views: bigint; waClicks: bigint; shares: bigint }[]>(
+        `SELECT ${bucket} as bucket,
+                SUM(CASE WHEN type = 'VIEW' THEN 1 ELSE 0 END) as views,
+                SUM(CASE WHEN type = 'WA_CLICK' THEN 1 ELSE 0 END) as waClicks,
+                SUM(CASE WHEN type = 'SHARE' THEN 1 ELSE 0 END) as shares
+         FROM product_events WHERE createdAt >= ? GROUP BY bucket`,
+        from
+      ),
     ]);
 
     const productIds = Array.from(
@@ -223,6 +291,14 @@ router.get(
     const repeatViewCount = repeatViewGroups.filter((g) => g._count._all > 1).length;
     const conversionRate = totalViews > 0 ? Math.round((totalWaClicks / totalViews) * 100) : 0;
 
+    const rowsByBucket = new Map(
+      timeseriesRows.map((r) => [
+        r.bucket,
+        { views: Number(r.views), waClicks: Number(r.waClicks), shares: Number(r.shares) },
+      ])
+    );
+    const timeseries = fillBuckets(buckets, rowsByBucket, { views: 0, waClicks: 0, shares: 0 });
+
     res.json({
       totalViews,
       totalWaClicks,
@@ -231,6 +307,7 @@ router.get(
       repeatViewCount,
       topViewed,
       topWishlisted,
+      timeseries,
     });
   })
 );
