@@ -46,7 +46,7 @@ export default function Footer() {
               <FaWhatsapp />
             </a>
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/rizal_heritage/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit Instagram"
@@ -55,7 +55,7 @@ export default function Footer() {
               <FaInstagram />
             </a>
             <a
-              href="https://facebook.com/rizalheritage"
+              href="https://www.facebook.com/marketplace/profile/100028906128157/?ref=permalink&mibextid=6ojiHh"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit our Facebook page"
@@ -64,7 +64,7 @@ export default function Footer() {
               <FaFacebook />
             </a>
             <a
-              href="https://shopee.co.id/rizalheritage"
+              href="https://shopee.co.id/dhina17_"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit our Shopee store"
@@ -101,13 +101,28 @@ export default function Footer() {
         ))}
 
         <div>
-          <h3 className="eyebrow mb-4">Visit the Workshop</h3>
+          <h3 className="eyebrow mb-4">Visit Our Store</h3>
           <address className="not-italic text-sm text-ivory/80 leading-relaxed">
-            Jl. Diponegoro No. 12
+            Pasar Mayestik Blok A Lantai Mezanine AKS 116 dan 110
             <br />
-            Pekalongan, Central Java 51111
+            Jl. Tebah 1 No.117, RT.15/RW.3, Gunung
             <br />
-            Indonesia
+            Kec. Kby. Baru, Kota Jakarta Selatan
+            <br />
+            DKI Jakarta 12120
+          </address>
+          <a
+            href="https://maps.app.goo.gl/bGSc6bT4EKW9yvfEA"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-brass hover:underline"
+          >
+            View on Google Maps
+          </a>
+          <address className="not-italic text-sm text-ivory/80 leading-relaxed mt-4">
+            Ruko Pasar Mayestik (samping JNE)
+            <br />
+            Jl. Tebah I No. 19, Kebayoran Baru, Jakarta Selatan
           </address>
           <p className="text-sm text-muted mt-4">Mon–Sat, 09:00–17:00 WIB</p>
         </div>

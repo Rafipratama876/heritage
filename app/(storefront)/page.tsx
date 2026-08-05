@@ -62,7 +62,7 @@ export default async function HomePage() {
           <div className="mt-8 flex items-center gap-4 animate-fadeUp" style={{ animationDelay: "0.6s", opacity: 0 }}>
             <span className="text-xs text-muted uppercase tracking-wide">Also find us on</span>
             <a
-              href="https://shopee.co.id/rizalheritage"
+              href="https://shopee.co.id/dhina17_"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit our Shopee store"
@@ -71,7 +71,7 @@ export default async function HomePage() {
               <SiShopee />
             </a>
             <a
-              href="https://facebook.com/rizalheritage"
+              href="https://www.facebook.com/marketplace/profile/100028906128157/?ref=permalink&mibextid=6ojiHh"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit our Facebook page"

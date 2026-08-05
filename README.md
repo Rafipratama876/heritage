@@ -63,7 +63,7 @@ docker compose run --rm seed   # loads the same catalog data used in lib/product
 
 ## Before going live
 
-1. Replace `WHATSAPP_NUMBER` in `lib/utils.ts` with your real business number.
+1. Set `NEXT_PUBLIC_WHATSAPP_NUMBER` in `.env` (or `.env.local`) to your real business number — digits only, country code first, no `+`/spaces/leading 0 (e.g. `62812xxxxxxx`). `lib/utils.ts` reads it from there, with a dummy fallback for local dev.
 2. Replace dummy Unsplash images with real product photography.
 3. Replace the Google Maps embed query in `app/contact/page.tsx` with your real address.
 4. Update `siteUrl` in `app/layout.tsx` and `app/sitemap.ts`/`app/robots.ts` to your real domain.

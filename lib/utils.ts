@@ -6,7 +6,8 @@ export function formatIDR(value: number): string {
   }).format(value);
 }
 
-export const WHATSAPP_NUMBER = "6281234567890"; // replace with real business number
+export const WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281234567890"; // fallback for local dev
 
 export function buildWhatsAppLink(productName?: string): string {
   const message = productName

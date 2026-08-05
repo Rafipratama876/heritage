@@ -8,15 +8,23 @@ import { buildWhatsAppLink } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Get in touch with Rizal Heritage — visit our workshop in Pekalongan, or reach us on WhatsApp, Instagram, or email.",
+    "Get in touch with Rizal Heritage — visit our store at Pasar Mayestik, Jakarta Selatan, or reach us on WhatsApp, Instagram, or email.",
 };
 
-const CONTACT_ITEMS = [
+const ADDRESSES = [
   {
-    icon: HiOutlineLocationMarker,
-    label: "Address",
-    value: "Jl. Diponegoro No. 12, Pekalongan, Central Java 51111, Indonesia",
+    name: "Rizal Heritage / Rizal Songket / Toko Songket Palembang",
+    value:
+      "Pasar Mayestik Blok A Lantai Mezanine AKS 116 dan 110, Jl. Tebah 1 No.117, RT.15/RW.3, Gunung, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12120",
+    mapHref: "https://maps.app.goo.gl/bGSc6bT4EKW9yvfEA",
   },
+  {
+    name: "Ruko Pasar Mayestik (samping JNE)",
+    value: "Jl. Tebah I No. 19 Kebayoran Baru, Jakarta Selatan",
+  },
+];
+
+const CONTACT_ITEMS = [
   {
     icon: HiOutlineClock,
     label: "Business Hours",
@@ -55,6 +63,25 @@ export default function ContactPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <Reveal>
           <div className="space-y-6">
+            {ADDRESSES.map((addr) => (
+              <div key={addr.name} className="flex gap-4 items-start border-b border-line pb-6">
+                <HiOutlineLocationMarker className="text-2xl text-brass shrink-0 mt-0.5" />
+                <div>
+                  <p className="eyebrow mb-1">{addr.name}</p>
+                  <p className="text-ivory">{addr.value}</p>
+                  {addr.mapHref && (
+                    <a
+                      href={addr.mapHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-brass hover:underline"
+                    >
+                      View on Google Maps
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
             {CONTACT_ITEMS.map((item) => (
               <div key={item.label} className="flex gap-4 items-start border-b border-line pb-6">
                 <item.icon className="text-2xl text-brass shrink-0 mt-0.5" />
@@ -82,7 +109,7 @@ export default function ContactPage() {
               <FaWhatsapp /> Chat on WhatsApp
             </a>
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/rizal_heritage/"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-outline"
@@ -94,8 +121,8 @@ export default function ContactPage() {
 
         <Reveal delay={0.1} className="label-frame overflow-hidden min-h-[360px]">
           <iframe
-            title="Rizal Heritage workshop location on Google Maps"
-            src="https://www.google.com/maps?q=Pekalongan,Central+Java,Indonesia&output=embed"
+            title="Rizal Heritage store location on Google Maps"
+            src="https://www.google.com/maps?q=Pasar+Mayestik+Blok+A+Lantai+Mezanine,+Jl.+Tebah+1+No.117,+Kebayoran+Baru,+Jakarta+Selatan&output=embed"
             width="100%"
             height="100%"
             style={{ border: 0, minHeight: 360 }}
