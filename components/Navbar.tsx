@@ -40,8 +40,30 @@ export default function Navbar() {
     setOpen(false);
   }, [pathname]);
 
+  // Lock scroll while the mobile menu is open. `overflow: hidden` alone
+  // doesn't reliably stop scrolling on iOS Safari — the page can still
+  // shift, which triggers the address bar to collapse/expand mid-animation
+  // and makes the menu appear to snap shut right after opening. Pinning
+  // the body with `position: fixed` avoids that.
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+
+    const scrollY = window.scrollY;
+    const { body } = document;
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.overflow = "hidden";
+
+    return () => {
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
+      body.style.overflow = "";
+      window.scrollTo(0, scrollY);
+    };
   }, [open]);
 
   return (
