@@ -204,21 +204,19 @@ export default function Navbar() {
           // WebKit repaint glitches for content nested inside it.
           //
           // The panel is *always* mounted (never conditionally
-          // added/removed) and purely CSS-driven — opacity/transform
-          // classes toggle off `open` — instead of using Framer Motion's
-          // mount-triggered `initial`/`animate`. That mount-triggered
-          // animation turned out to be the real bug: in production it would
-          // sometimes get stuck at its `initial` style (`opacity: 0`)
-          // forever, so the panel was fully laid out and clickable but
-          // never actually painted. A plain CSS transition on an
-          // already-mounted element has no such "did the animation actually
-          // start" failure mode.
+          // added/removed) and toggled with the plain `hidden` utility —
+          // no opacity/transform transition at all. Every animated version
+          // tried before this (Framer Motion mount animation, portal + key
+          // remount, then a CSS opacity/transform transition) got stuck
+          // out of sync with the open/close state on real devices at least
+          // once — laid out and clickable, just not painted, or painted a
+          // step behind the toggle button. An instant, transition-free
+          // `display` swap has no timing to get out of sync: it's either
+          // in the layout or it isn't, on the very same render as `open`.
           <div
             className={cn(
-              "lg:hidden fixed top-20 inset-x-0 z-50 bg-canvas border-b border-line max-h-[calc(100vh-5rem)] overflow-y-auto transition-all duration-200 ease-out",
-              open
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 -translate-y-2 pointer-events-none",
+              "lg:hidden fixed top-20 inset-x-0 z-50 bg-canvas border-b border-line max-h-[calc(100vh-5rem)] overflow-y-auto",
+              open ? "block" : "hidden",
             )}
             aria-hidden={!open}
           >
