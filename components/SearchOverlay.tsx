@@ -34,6 +34,9 @@ export default function SearchOverlay({
     }
   }, [isOpen]);
 
+  // Live results as the user types, debounced for UX — this does NOT
+  // record search insight, since a partial/in-progress query isn't a
+  // meaningful "search" yet (see handleSubmit below).
   useEffect(() => {
     if (!debouncedQuery.trim()) {
       setResults([]);
@@ -44,7 +47,6 @@ export default function SearchOverlay({
     searchProducts(debouncedQuery)
       .then((products) => {
         if (!cancelled) setResults(products);
-        trackSearch(debouncedQuery, products.length);
       })
       .catch(() => {
         if (!cancelled) setResults([]);
@@ -57,10 +59,14 @@ export default function SearchOverlay({
     };
   }, [debouncedQuery]);
 
+  // Search Insight (keyword tracking) only fires here, on explicit submit
+  // (Enter key or "View all results" click) — not on every keystroke.
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!query.trim()) return;
-    router.push(`/products?search=${encodeURIComponent(query.trim())}`);
+    const trimmed = query.trim();
+    if (!trimmed) return;
+    trackSearch(trimmed, results.length);
+    router.push(`/products?search=${encodeURIComponent(trimmed)}`);
     onClose();
   }
 
