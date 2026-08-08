@@ -146,6 +146,7 @@ const productSchema = z.object({
   collectionSlugs: z.array(z.string().min(1)).min(1),
   categories: z.array(z.enum(CATEGORY_VALUES)).min(1),
   images: z.array(z.string().url()).min(1),
+  videoUrl: z.string().url().nullable().optional(),
   specifications: z.array(specSchema).default([]),
   featured: z.boolean().optional(),
 });
@@ -177,6 +178,7 @@ router.post(
         shortDescription: data.shortDescription,
         description: data.description,
         featured: data.featured ?? false,
+        videoUrl: data.videoUrl ?? null,
         images: { create: data.images.map((url, idx) => ({ url, order: idx })) },
         specifications: {
           create: data.specifications.map((s, idx) => ({ label: s.label, value: s.value, order: idx })),
@@ -236,6 +238,7 @@ router.put(
         ...(data.shortDescription && { shortDescription: data.shortDescription }),
         ...(data.description && { description: data.description }),
         ...(data.featured !== undefined && { featured: data.featured }),
+        ...(data.videoUrl !== undefined && { videoUrl: data.videoUrl }),
         ...(data.images && {
           images: { create: data.images.map((url, idx) => ({ url, order: idx })) },
         }),

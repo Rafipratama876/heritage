@@ -12,6 +12,7 @@ import {
 import { readToken } from "@/components/AuthProvider";
 import { useToast } from "@/components/ToastProvider";
 import ImageUpload from "@/components/admin/ImageUpload";
+import VideoUpload from "@/components/admin/VideoUpload";
 import type { Product, Collection, Category } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -49,6 +50,7 @@ export default function ProductForm({
   const [categories, setCategories] = useState<Category[]>(initialProduct?.categories ?? []);
   const [featured, setFeatured] = useState(initialProduct?.featured ?? false);
   const [images, setImages] = useState<string[]>(initialProduct?.images ?? []);
+  const [videoUrl, setVideoUrl] = useState<string | null>(initialProduct?.videoUrl ?? null);
   const [specs, setSpecs] = useState(
     initialProduct?.specifications?.length
       ? initialProduct.specifications
@@ -124,6 +126,7 @@ export default function ProductForm({
       collectionSlugs,
       categories,
       images,
+      videoUrl,
       specifications: specs.filter((s) => s.label.trim() && s.value.trim()),
       featured,
     };
@@ -233,6 +236,10 @@ export default function ProductForm({
 
       <Field label="Images">
         <ImageUpload value={images} onChange={setImages} />
+      </Field>
+
+      <Field label="Product Video (optional)">
+        <VideoUpload value={videoUrl} onChange={setVideoUrl} />
       </Field>
 
       <div>

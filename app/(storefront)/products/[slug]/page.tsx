@@ -85,7 +85,7 @@ export default async function ProductDetailPage({
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-        <ProductGallery images={product.images} alt={product.name} />
+        <ProductGallery images={product.images} videoUrl={product.videoUrl} alt={product.name} />
 
         <div>
           <p className="eyebrow mb-2">

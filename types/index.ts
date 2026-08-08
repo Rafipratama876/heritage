@@ -36,6 +36,7 @@ export type Product = {
   collections: string[]; // Collection slugs
   categories: Category[];
   images: string[];
+  videoUrl?: string | null;
   specifications: { label: string; value: string }[];
   featured?: boolean;
 };

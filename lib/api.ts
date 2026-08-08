@@ -54,6 +54,7 @@ type ApiProduct = {
   categories: string[];
   featured: boolean;
   images: ApiImage[];
+  videoUrl: string | null;
   specifications: ApiSpec[];
   collections: { slug: string; name: string }[];
 };
@@ -79,6 +80,7 @@ function mapProduct(p: ApiProduct): Product {
     collections: (p.collections ?? []).map((c) => c.slug),
     categories: (p.categories ?? []).map(fromApiCategory),
     images: (p.images ?? []).map((img) => img.url),
+    videoUrl: p.videoUrl ?? null,
     specifications: (p.specifications ?? []).map((s) => ({ label: s.label, value: s.value })),
     featured: p.featured,
   };
@@ -506,6 +508,7 @@ export type ProductInput = {
   collectionSlugs: string[];
   categories: Category[];
   images: string[];
+  videoUrl?: string | null;
   specifications: { label: string; value: string }[];
   featured?: boolean;
 };
@@ -700,6 +703,40 @@ export async function adminUploadImages(token: string, files: File[]): Promise<s
     throw new Error("Received an unexpected response from the server. Please try again.");
   }
   return data.urls.map((url: string) => `${BROWSER_API_URL}${url}`);
+}
+
+// Uploads a single product video (Multer-backed, admin only, separate
+// size/mimetype limits from images — see backend/src/routes/uploads.ts)
+// and returns the full, browser-viewable URL.
+export async function adminUploadVideo(token: string, file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  let res: Response;
+  try {
+    res = await fetch(`${BROWSER_API_URL}/api/uploads/video`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+  } catch {
+    throw new Error("Couldn't reach the server. Check your connection and try again.");
+  }
+
+  let data: any = null;
+  try {
+    data = await res.json();
+  } catch {
+    // fall through — handled below
+  }
+
+  if (!res.ok) {
+    throw new Error(data?.error || `Upload failed (${res.status}). Please try again.`);
+  }
+  if (!data?.url) {
+    throw new Error("Received an unexpected response from the server. Please try again.");
+  }
+  return `${BROWSER_API_URL}${data.url}`;
 }
 
 // ---- Admin: Analytics ----

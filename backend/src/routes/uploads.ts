@@ -62,4 +62,50 @@ router.post(
   }
 );
 
+// Separate config for product videos: one file at a time, much larger
+// size ceiling than photos, and a distinct mimetype allow-list. Shares
+// the same disk destination/filename scheme (and therefore the same
+// "/uploads/..." serving route in index.ts) as image uploads above.
+const ALLOWED_VIDEO_TYPES = new Set(["video/mp4", "video/webm", "video/ogg", "video/quicktime"]);
+const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB
+
+const uploadVideo = multer({
+  storage,
+  limits: { fileSize: MAX_VIDEO_SIZE, files: 1 },
+  fileFilter: (_req, file, cb) => {
+    if (!ALLOWED_VIDEO_TYPES.has(file.mimetype)) {
+      cb(new ApiError(400, "Only MP4, WEBM, OGG, or MOV videos are allowed"));
+      return;
+    }
+    cb(null, true);
+  },
+});
+
+// POST /api/uploads/video — admin only. Accepts a single file under the
+// "file" field. Returns the same "/uploads/..." shape as the image
+// endpoint above, just with exactly one URL.
+router.post(
+  "/video",
+  requireAuth,
+  requireAdmin,
+  (req, res, next) => {
+    uploadVideo.single("file")(req, res, (err) => {
+      if (err) {
+        if (err instanceof multer.MulterError) {
+          return res.status(400).json({ error: err.message });
+        }
+        return next(err);
+      }
+      next();
+    });
+  },
+  (req, res) => {
+    const file = req.file as Express.Multer.File | undefined;
+    if (!file) {
+      return res.status(400).json({ error: "No file was uploaded" });
+    }
+    res.status(201).json({ url: `/uploads/${file.filename}` });
+  }
+);
+
 export default router;
