@@ -27,7 +27,11 @@ export default function CartDrawer() {
       showToast("Please log in to check out.", "info");
       closeCart();
       router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+      return;
     }
+    // Built here, not at render time, to avoid a hydration mismatch —
+    // see the identical comment in WhatsAppOrderButton.tsx.
+    e.currentTarget.href = buildWhatsAppCartLink(cart.items, cart.totalPrice, window.location.origin);
   }
 
   return (

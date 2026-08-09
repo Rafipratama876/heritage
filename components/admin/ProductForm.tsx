@@ -49,6 +49,7 @@ export default function ProductForm({
   const [collectionSlugs, setCollectionSlugs] = useState<string[]>(initialProduct?.collections ?? []);
   const [categories, setCategories] = useState<Category[]>(initialProduct?.categories ?? []);
   const [featured, setFeatured] = useState(initialProduct?.featured ?? false);
+  const [available, setAvailable] = useState(initialProduct?.available ?? true);
   const [images, setImages] = useState<string[]>(initialProduct?.images ?? []);
   const [videoUrl, setVideoUrl] = useState<string | null>(initialProduct?.videoUrl ?? null);
   const [specs, setSpecs] = useState(
@@ -129,6 +130,7 @@ export default function ProductForm({
       videoUrl,
       specifications: specs.filter((s) => s.label.trim() && s.value.trim()),
       featured,
+      available,
     };
 
     setSaving(true);
@@ -287,6 +289,16 @@ export default function ProductForm({
           className="accent-brass"
         />
         Featured (shown on homepage)
+      </label>
+
+      <label className="flex items-center gap-2 text-sm text-ivory/80">
+        <input
+          type="checkbox"
+          checked={!available}
+          onChange={(e) => setAvailable(!e.target.checked)}
+          className="accent-clay"
+        />
+        Unavailable (hides Order/Add to Cart — no stock tracking, this is a manual switch)
       </label>
 
       <div className="flex gap-3 pt-2">

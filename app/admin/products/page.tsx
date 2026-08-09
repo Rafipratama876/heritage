@@ -96,6 +96,11 @@ export default function AdminProductsPage() {
                         FEATURED
                       </span>
                     )}
+                    {!p.available && (
+                      <span className="ml-2 text-[10px] font-mono text-clay border border-clay px-1.5 py-0.5">
+                        UNAVAILABLE
+                      </span>
+                    )}
                   </td>
                   <td className="p-3 text-muted">{p.categories.join(", ")}</td>
                   <td className="p-3 text-muted">{p.collections.join(", ")}</td>

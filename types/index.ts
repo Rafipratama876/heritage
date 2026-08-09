@@ -39,6 +39,7 @@ export type Product = {
   videoUrl?: string | null;
   specifications: { label: string; value: string }[];
   featured?: boolean;
+  available: boolean;
 };
 
 export type AuthUser = {

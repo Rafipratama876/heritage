@@ -214,7 +214,7 @@ export default function AdminInsightPage() {
               </div>
             </div>
             <div className="border border-line max-w-2xl mt-4">
-              <StatRow label="Produk Dilihat" value={String(productInsight.totalViews)} note="Total view semua halaman produk" />
+              <StatRow label="Produk Dilihat" value={String(productInsight.totalViews)} note="Total view semua halaman product" />
               <StatRow label="Klik Produk to Order (WA)" value={String(productInsight.totalWaClicks)} />
               <StatRow label="Share Produk" value={String(productInsight.totalShares)} />
               <StatRow label="Conversion Rate" value={`${productInsight.conversionRate}%`} note="View → Klik Order WA" />
@@ -261,7 +261,7 @@ export default function AdminInsightPage() {
             {search.zeroResultKeywords.length > 0 && (
               <div className="border border-line max-w-2xl mt-4">
                 <div className="border-b border-line p-3 bg-surface text-sm text-muted">
-                  Keyword Tanpa Hasil — sinyal produk yang perlu ditambah
+                  Keyword Tanpa Hasil — sinyal product yang perlu ditambah
                 </div>
                 {search.zeroResultKeywords.map((k) => (
                   <StatRow key={k.query} label={k.query} value={String(k.count)} />

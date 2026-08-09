@@ -61,7 +61,9 @@ export default async function ProductDetailPage({
       "@type": "Offer",
       priceCurrency: "IDR",
       price: product.price,
-      availability: "https://schema.org/InStock",
+      availability: product.available
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
     },
   };
 
@@ -97,18 +99,34 @@ export default async function ProductDetailPage({
           <p className="font-mono text-xl text-brass mt-4">
             {formatIDR(product.price)}
           </p>
+          {!product.available && (
+            <p className="inline-block mt-4 font-mono text-xs tracking-widest2 text-clay border border-clay px-2.5 py-1">
+              CURRENTLY UNAVAILABLE
+            </p>
+          )}
           <p className="text-muted mt-6 leading-relaxed">
             {product.description}
           </p>
 
           <div className="mt-8 space-y-3">
-            <AddToCartForm product={product} />
-            <div className="flex items-center gap-3">
-              <div className="flex-1">
-                <WhatsAppOrderButton productId={product.id} productName={product.name} />
+            {product.available ? (
+              <>
+                <AddToCartForm product={product} />
+                <div className="flex items-center gap-3">
+                  <div className="flex-1">
+                    <WhatsAppOrderButton productId={product.id} productName={product.name} />
+                  </div>
+                  <ShareButton productId={product.id} title={product.name} text={product.shortDescription} />
+                </div>
+              </>
+            ) : (
+              <div className="flex items-center gap-3">
+                <p className="flex-1 text-sm text-muted border border-line px-4 py-4">
+                  This piece isn&apos;t available right now — check back later or ask us on WhatsApp about similar pieces.
+                </p>
+                <ShareButton productId={product.id} title={product.name} text={product.shortDescription} />
               </div>
-              <ShareButton productId={product.id} title={product.name} text={product.shortDescription} />
-            </div>
+            )}
           </div>
 
           <div className="mt-10 border-t border-line pt-8">

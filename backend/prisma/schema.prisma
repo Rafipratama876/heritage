@@ -99,6 +99,9 @@ model Product {
   shortDescription String              @db.Text
   description      String              @db.Text
   featured         Boolean             @default(false)
+  // No stock/quantity tracking in this catalog — this is a manual
+  // on/off switch admins flip instead, e.g. for a one-off/sold piece.
+  available        Boolean             @default(true)
   videoUrl         String?             @db.Text
   images           ProductImage[]
   specifications   Specification[]

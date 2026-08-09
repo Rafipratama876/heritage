@@ -32,6 +32,12 @@ export default function WhatsAppOrderButton({
       router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
       return;
     }
+    // Swap in the page-URL-aware href right before the browser follows
+    // it. Built here (not at render time) so server and first client
+    // render produce the same markup — window.location isn't available
+    // on the server, and reading it during render would cause a
+    // hydration mismatch on this attribute.
+    e.currentTarget.href = buildWhatsAppLink(productName, window.location.href);
     if (productId) trackProductEvent(productId, "WA_CLICK");
   }
 

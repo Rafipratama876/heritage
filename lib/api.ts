@@ -53,6 +53,7 @@ type ApiProduct = {
   description: string;
   categories: string[];
   featured: boolean;
+  available: boolean;
   images: ApiImage[];
   videoUrl: string | null;
   specifications: ApiSpec[];
@@ -83,6 +84,7 @@ function mapProduct(p: ApiProduct): Product {
     videoUrl: p.videoUrl ?? null,
     specifications: (p.specifications ?? []).map((s) => ({ label: s.label, value: s.value })),
     featured: p.featured,
+    available: p.available,
   };
 }
 
@@ -511,6 +513,7 @@ export type ProductInput = {
   videoUrl?: string | null;
   specifications: { label: string; value: string }[];
   featured?: boolean;
+  available?: boolean;
 };
 
 export async function adminCreateProduct(token: string, input: ProductInput): Promise<Product> {
