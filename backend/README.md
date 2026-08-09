@@ -223,7 +223,7 @@ frontend (`components/VisitorTracker.tsx`) pings a public endpoint on every rout
 change with a random id it keeps in `localStorage`, no IP address or precise location
 stored. "Total Visitor" and "Session" are currently the same number (both mean
 "a visit") — see the code comment in `backend/src/routes/analytics.ts` if you want to
-change that. Country/city (`Negara/Kota`) isn't implemented — it needs a GeoIP lookup,
+change that. Country/city (`country`) isn't implemented — it needs a GeoIP lookup,
 which wasn't set up yet.
 
 | Method | Path         | Auth | Body | Notes |

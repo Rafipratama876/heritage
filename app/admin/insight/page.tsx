@@ -205,23 +205,23 @@ export default function AdminInsightPage() {
             />
             <div className="grid sm:grid-cols-2 gap-4 mt-4">
               <div>
-                <p className="text-sm text-muted mb-2">Produk Paling Dilihat</p>
+                <p className="text-sm text-muted mb-2">Product Paling Dilihat</p>
                 <InsightBarChart data={topViewedBars} xKey="name" yKey="count" horizontal color={CHART_COLORS.brass} />
               </div>
               <div>
-                <p className="text-sm text-muted mb-2">Produk Paling Diwishlist</p>
+                <p className="text-sm text-muted mb-2">Product Paling Diwishlist</p>
                 <InsightBarChart data={topWishlistedBars} xKey="name" yKey="count" horizontal color={CHART_COLORS.clay} />
               </div>
             </div>
             <div className="border border-line max-w-2xl mt-4">
-              <StatRow label="Produk Dilihat" value={String(productInsight.totalViews)} note="Total view semua halaman product" />
-              <StatRow label="Klik Produk to Order (WA)" value={String(productInsight.totalWaClicks)} />
-              <StatRow label="Share Produk" value={String(productInsight.totalShares)} />
+              <StatRow label="Product Dilihat" value={String(productInsight.totalViews)} note="Total view semua halaman product" />
+              <StatRow label="Klik Product to Order (WA)" value={String(productInsight.totalWaClicks)} />
+              <StatRow label="Share Product" value={String(productInsight.totalShares)} />
               <StatRow label="Conversion Rate" value={`${productInsight.conversionRate}%`} note="View → Klik Order WA" />
               <StatRow
                 label="Repeat View"
                 value={String(productInsight.repeatViewCount)}
-                note="Produk dibuka lebih dari sekali oleh user yang sama"
+                note="Product dibuka lebih dari sekali oleh user yang sama"
               />
             </div>
           </>
@@ -290,7 +290,7 @@ export default function AdminInsightPage() {
                 }
               />
               <StatRow
-                label="Negara/Kota"
+                label="country"
                 value={ga4.topCountries.map((c) => `${c.country}: ${c.activeUsers}`).join(" · ") || "—"}
               />
             </div>
