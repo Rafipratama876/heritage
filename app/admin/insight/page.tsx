@@ -290,7 +290,7 @@ export default function AdminInsightPage() {
                 }
               />
               <StatRow
-                label="country"
+                label="Country"
                 value={ga4.topCountries.map((c) => `${c.country}: ${c.activeUsers}`).join(" · ") || "—"}
               />
             </div>
