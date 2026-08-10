@@ -19,42 +19,57 @@ const CARDS = [
   {
     icon: HiOutlineTruck,
     title: "Shipping Methods",
-    body: "Domestic orders ship via trusted courier partners (JNE, J&T), with standard packaging for textiles and reinforced boxes for jewelry and ceramics. International orders ship via air cargo.",
+    body: "Domestic orders are shipped via our trusted courier partners, JNE and J&T. Instant online services for shipments within Jakarta. International orders are shipped via Rayspeed for destinations within Southeast Asia, and via DHL Express for all other international destinations, ensuring fast and reliable worldwide delivery.",
   },
   {
     icon: HiOutlineGlobeAlt,
     title: "Delivery Coverage",
-    body: "We deliver across all of Indonesia and to 18 countries internationally, including Singapore, Australia, the US, and the EU. Contact us to confirm coverage for your location.",
+    body: "We deliver throughout Indonesia and to destinations worldwide. Shipping costs are not included in the product price and will be calculated based on your delivery location. Please contact us before placing your order to confirm your shipping destination, and we will provide the applicable shipping rate.",
   },
   {
     icon: HiOutlineClock,
     title: "Estimated Delivery",
-    body: "Domestic (Java): 2–5 business days. Domestic (outer islands): 5–10 business days. International: 1–3 weeks by air, depending on customs.",
+    body: "Domestic (Java): 1–4 business days. Domestic (outer islands): 3–7 business days. International: 5 - 21 business days, depending on the destination and customs clearance process.",
   },
   {
     icon: HiOutlineCube,
     title: "Packaging",
-    body: "Textiles are folded in acid-free tissue and sealed in poly mailers to stay dry. Jewelry and ceramics are boxed with padded inserts and corner protection.",
+    body: "Textiles are carefully folded, wrapped in protective plastic, and sealed in poly mailers to keep them dry. Jewelry and ceramics are securely boxed with padded inserts and corner protection for safe delivery.",
   },
 ];
 
 const FAQ = [
   {
-    q: "Do you ship internationally?",
-    a: "Yes, we regularly ship to Singapore, Malaysia, Australia, the US, and across Europe. Freight cost depends on weight and destination — send us a message on WhatsApp with your city for a quote.",
-  },
-  {
     q: "Can I track my order?",
     a: "Yes. Once your order ships, we'll send a tracking number through WhatsApp or email, along with the courier's tracking link.",
   },
   {
-    q: "What if a piece is made to order?",
-    a: "Made-to-order pieces such as songket and tailored kebaya typically take 2–4 weeks to complete before shipping begins. We'll confirm the exact lead time when you order.",
+    q: "Do I need to pay for shipping?",
+    a: "Yes, you need to pay for shipping. Please tell us your shipping destination, and we will provide the applicable shipping rate.",
   },
   {
-    q: "How should I care for handwoven or hand-dyed pieces?",
-    a: "Hand wash cold and dry in shade for batik and tenun to protect natural dyes; songket and delicate embroidery are best dry-cleaned. Care instructions are listed on each product page.",
+    q: "Will I Need to Pay Customs Duties or Taxes?",
+    a: `Customs duties, import taxes, and courier processing fees may apply in your destination country. These charges are determined by your local customs authority and must be paid by the recipient. They are not
+included in your order total or shipping fee.
+If any customs charges are due, the shipping carrier will contact you directly with payment instructions before delivery.
+Rizal Heritage is unable to pay or reimburse customs duties, taxes, or processing fees on your behalf. If these charges are refused or remain unpaid, the parcel may be returned to us. In such cases, the order will
+not be eligible for a refund.
+To avoid unexpected costs or delivery delays, we recommend contacting your local customs office before placing your order to estimate any applicable import duties or taxes.`,
   },
+  {
+    q: "What should I do if my parcel arrives damaged?",
+    a: `If your parcel arrives damaged, please record a video before opening it (an unboxing video) and take clear photos of the damaged packaging and the contents. Keep all packaging materials and the damaged
+items until your claim has been resolved.
+Once your parcel has been shipped, the courier is responsible for its safe delivery. However, we will assist you throughout the claims process and provide any necessary support.`,
+  },
+  {
+    q: "Can I add shipping insurance?",
+    a: "Shipping insurance is not included in our prices. If you would like to insure your order, please contact us via WhatsApp before payment. We will calculate the insurance cost and add it to your order total."
+  },
+  {
+    q: "What about refused delivery?",
+    a: "Customers are responsible for ensuring their address and contact phone number are correct and complete. Rizal Heritage will not be held responsible for shipping to incorrect addresses."
+  }
 ];
 
 export default function ShippingPage() {
@@ -68,8 +83,8 @@ export default function ShippingPage() {
           Shipping & Delivery
         </h1>
         <p className="text-muted mt-4">
-          Everything you need to know about how we pack, ship, and deliver
-          each piece — from our workshop in Pekalongan to your door.
+          Everything you need to know about how we pack, ship, and deliver each piece — from our
+          workshop in Jakarta, Indonesia to your door.
         </p>
       </div>
 
