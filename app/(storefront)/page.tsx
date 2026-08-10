@@ -35,11 +35,14 @@ export default async function HomePage() {
             priority
             className="object-cover opacity-60"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-canvas via-canvas/70 to-canvas/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-canvas via-canvas/70 to-canvas/50" />
         </div>
 
         <div className="container-content relative pb-20 pt-40">
-          <p className="eyebrow mb-5 animate-fadeUp" style={{ animationDelay: "0.1s", opacity: 0 }}>
+          <p
+            className="eyebrow mb-5 animate-fadeUp drop-shadow-[0_1px_3px_rgba(0,0,0,0.55)]"
+            style={{ animationDelay: "0.1s", opacity: 0 }}
+          >
             Est. 1998 &bull; Curating Indonesian Textile Heritage &bull; Java &amp; Sumatra, Indonesia
           </p>
           <h1 className="font-display text-[13vw] leading-[0.95] sm:text-6xl md:text-7xl lg:text-8xl text-ivory max-w-4xl animate-fadeUp" style={{ animationDelay: "0.2s", opacity: 0 }}>
@@ -89,8 +92,8 @@ export default async function HomePage() {
       <section className="container-content py-24 sm:py-32 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <Reveal className="relative aspect-[4/5] label-frame overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1759738096144-b43206226765?q=80&w=1400&auto=format&fit=crop"
-            alt="Artisan hand-weaving traditional cloth on a wooden loom"
+            src="/images/our-story-rizal.jpg"
+            alt="M. Hijazi Rizal holding a piece of hand-woven Songket Palembang in his store"
             fill
             className="object-cover"
           />
@@ -98,30 +101,25 @@ export default async function HomePage() {
         <div>
           <p className="eyebrow mb-3">Our Story</p>
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-ivory leading-tight">
-            Three generations of one weaving family.
+            The Story Behind Rizal Heritage
           </h2>
           <p className="mt-6 text-muted leading-relaxed">
-            Rizal Heritage began as a single batik workshop in a Central Java
-            courtyard. Today the same family works alongside weaving
-            cooperatives and goldsmiths across Java, Sumatra, and Bali —
-            producing batik, songket, kebaya, and jewelry, still using hand
-            tools, still refusing shortcuts. Nothing we make is
-            mass-produced, and no two pieces are ever quite alike.
+            Rizal Heritage was founded on a lifelong passion for
+            Indonesia&rsquo;s traditional textiles. Since 1998, M. Hijazi
+            Rizal has dedicated himself to collecting, studying, and
+            preserving some of the country&rsquo;s finest handwoven and
+            batik masterpieces.
           </p>
-          <div className="mt-8 grid grid-cols-3 gap-6 border-t border-line pt-8">
-            <div>
-              <p className="font-display text-3xl text-brass">36+</p>
-              <p className="text-xs text-muted mt-1 tracking-wide">Years of craft</p>
-            </div>
-            <div>
-              <p className="font-display text-3xl text-brass">120+</p>
-              <p className="text-xs text-muted mt-1 tracking-wide">Artisans</p>
-            </div>
-            <div>
-              <p className="font-display text-3xl text-brass">18</p>
-              <p className="text-xs text-muted mt-1 tracking-wide">Countries shipped</p>
-            </div>
-          </div>
+          <p className="mt-4 text-muted leading-relaxed">
+            His journey began in Palembang, where he assisted his
+            brother-in-law in sourcing Songket Palembang to be resold. What
+            started as learning the trade quickly grew into a lifelong
+            calling. By 2000, they opened their first store together in
+            Blok M, Jakarta, introducing authentic Palembang Songket to a
+            wider audience. After three years, the business moved to Pasar
+            Mayestik, where Rizal Heritage continues to welcome collectors,
+            designers, and textile enthusiasts from around the world.
+          </p>
         </div>
       </section>
 
