@@ -38,7 +38,7 @@ textile heritage through a carefully
 curated collection .
           </p>
           <div className="flex items-center gap-4 mt-6 text-lg text-muted">
-            <a
+            {/* <a
               href={buildWhatsAppLink()}
               target="_blank"
               rel="noopener noreferrer"
@@ -46,7 +46,7 @@ curated collection .
               className="hover:text-brass transition-colors"
             >
               <FaWhatsapp />
-            </a>
+            </a> */}
             <a
               href="https://www.instagram.com/rizal_heritage/"
               target="_blank"
