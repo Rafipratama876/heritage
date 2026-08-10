@@ -75,7 +75,7 @@ curated collection .
               <SiShopee />
             </a>
             <a
-              href="mailto:hello@rizalheritage.com"
+              href="mailto:rizalhijazi@gmail.com"
               aria-label="Send an email"
               className="hover:text-brass transition-colors"
             >
