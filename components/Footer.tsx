@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { FaWhatsapp, FaInstagram, FaEnvelope, FaFacebook } from "react-icons/fa";
 import { SiShopee } from "react-icons/si";
 import { buildWhatsAppLink } from "@/lib/utils";
@@ -28,9 +29,13 @@ export default function Footer() {
     <footer className="border-t border-line bg-surface mt-24">
       <div className="container-content py-16 grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1.2fr] gap-12">
         <div>
-          <span className="font-display text-2xl text-ivory">
-            Rizal <span className="italic text-brass">Heritage</span>
-          </span>
+          <Image
+            src="/images/logo.png"
+            alt="Rizal Heritage"
+            width={892}
+            height={821}
+            className="h-16 w-auto"
+          />
           <p className="mt-4 text-sm text-muted max-w-xs leading-relaxed">
           Since 1998, Rizal Heritage has been
 dedicated to preserving Indonesia’s

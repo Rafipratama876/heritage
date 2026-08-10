@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -82,13 +83,15 @@ export default function Navbar() {
       )}
     >
       <nav className="container-content flex items-center justify-between h-20">
-        <Link href="/" className="flex items-baseline gap-2 group">
-          <span className="font-display text-xl sm:text-2xl tracking-wide text-ivory">
-            Rizal
-          </span>
-          <span className="font-display italic text-xl sm:text-2xl text-brass">
-            Heritage
-          </span>
+        <Link href="/" className="flex items-center group shrink-0">
+          <Image
+            src="/images/logo.png"
+            alt="Rizal Heritage"
+            width={892}
+            height={821}
+            priority
+            className="h-14 w-auto"
+          />
         </Link>
 
         <ul className="hidden lg:flex items-center gap-8">
