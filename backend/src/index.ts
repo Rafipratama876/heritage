@@ -16,6 +16,7 @@ import uploadRoutes from "./routes/uploads";
 import analyticsRoutes from "./routes/analytics";
 import trackRoutes from "./routes/track";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
+import { scheduleInsightCleanup } from "./jobs/cleanupInsight";
 
 const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4000;
@@ -57,3 +58,9 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`Rizal Heritage API listening on port ${PORT}`);
 });
+
+// Daily job that purges raw Insight event rows (logins, page views,
+// search queries, product events) older than the retention window —
+// see backend/src/jobs/cleanupInsight.ts for what that means for the
+// admin dashboard's all-time totals.
+scheduleInsightCleanup();

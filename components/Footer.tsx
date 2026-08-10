@@ -33,7 +33,7 @@ export default function Footer() {
           </span>
           <p className="mt-4 text-sm text-muted max-w-xs leading-relaxed">
             Hand-drawn batik, hand-loomed songket and tenun, and traditional
-            accessories, made by artisan workshops across Indonesia since 1988.
+            accessories, made by artisan workshops across Indonesia since 1998.
           </p>
           <div className="flex items-center gap-4 mt-6 text-lg text-muted">
             <a

@@ -29,8 +29,8 @@ export default async function HomePage() {
       <section className="relative min-h-[92vh] flex items-end overflow-hidden border-b border-line">
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1761517099330-13b34b141d74?q=80&w=2000&auto=format&fit=crop"
-            alt="Hand-drawn batik cloth in warm brown and gold tones"
+            src="/images/hero-bg.png"
+            alt="Traditional Indonesian songket textile pattern in red and gold"
             fill
             priority
             className="object-cover opacity-60"
@@ -40,15 +40,17 @@ export default async function HomePage() {
 
         <div className="container-content relative pb-20 pt-40">
           <p className="eyebrow mb-5 animate-fadeUp" style={{ animationDelay: "0.1s", opacity: 0 }}>
-            Est. 1988 · Central Java &amp; Sumatra, Indonesia
+            Est. 1998 &bull; Curating Indonesian Textile Heritage &bull; Java &amp; Sumatra, Indonesia
           </p>
           <h1 className="font-display text-[13vw] leading-[0.95] sm:text-6xl md:text-7xl lg:text-8xl text-ivory max-w-4xl animate-fadeUp" style={{ animationDelay: "0.2s", opacity: 0 }}>
-            Textiles woven to <span className="italic text-brass">outlive</span> the century.
+            Indonesia&rsquo;s Textile Heritage,
+            <br />
+            <span className="italic text-brass">Curated</span> for Generations.
           </h1>
-          <p className="mt-6 text-muted text-base sm:text-lg max-w-lg animate-fadeUp" style={{ animationDelay: "0.35s", opacity: 0 }}>
-            Every piece in our catalog is hand-made by batik houses and weaving
-            workshops across Indonesia, using techniques passed down through
-            three generations.
+          <p className="mt-6 text-muted text-base sm:text-lg max-w-2xl animate-fadeUp" style={{ animationDelay: "0.35s", opacity: 0 }}>
+            Discover handcrafted batik, tenun, songket, and other Indonesian
+            textiles from master artisans across the archipelago—preserving
+            stories, traditions, and craftsmanship for generations to come.
           </p>
           <div className="mt-9 flex flex-wrap gap-4 animate-fadeUp" style={{ animationDelay: "0.5s", opacity: 0 }}>
             <Link href="/products" className="btn-primary">
