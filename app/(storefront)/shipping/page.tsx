@@ -49,18 +49,11 @@ const FAQ = [
   },
   {
     q: "Will I Need to Pay Customs Duties or Taxes?",
-    a: `Customs duties, import taxes, and courier processing fees may apply in your destination country. These charges are determined by your local customs authority and must be paid by the recipient. They are not
-included in your order total or shipping fee.\n
-If any customs charges are due, the shipping carrier will contact you directly with payment instructions before delivery.\n
-Rizal Heritage is unable to pay or reimburse customs duties, taxes, or processing fees on your behalf. If these charges are refused or remain unpaid, the parcel may be returned to us. In such cases, the order will
-not be eligible for a refund.\n
-To avoid unexpected costs or delivery delays, we recommend contacting your local customs office before placing your order to estimate any applicable import duties or taxes.`,
+    a: "Customs duties, import taxes, and courier processing fees may apply in your destination country. These charges are determined by your local customs authority and must be paid by the recipient. They are not included in your order total or shipping fee.\n\nIf any customs charges are due, the shipping carrier will contact you directly with payment instructions before delivery.\n\nRizal Heritage is unable to pay or reimburse customs duties, taxes, or processing fees on your behalf. If these charges are refused or remain unpaid, the parcel may be returned to us. In such cases, the order will not be eligible for a refund.\n\nTo avoid unexpected costs or delivery delays, we recommend contacting your local customs office before placing your order to estimate any applicable import duties or taxes.",
   },
   {
     q: "What should I do if my parcel arrives damaged?",
-    a: `If your parcel arrives damaged, please record a video before opening it (an unboxing video) and take clear photos of the damaged packaging and the contents. Keep all packaging materials and the damaged
-items until your claim has been resolved.\n
-Once your parcel has been shipped, the courier is responsible for its safe delivery. However, we will assist you throughout the claims process and provide any necessary support.`,
+    a: "If your parcel arrives damaged, please record a video before opening it (an unboxing video) and take clear photos of the damaged packaging and the contents. Keep all packaging materials and the damaged items until your claim has been resolved.\n\nOnce your parcel has been shipped, the courier is responsible for its safe delivery. However, we will assist you throughout the claims process and provide any necessary support.",
   },
   {
     q: "Can I add shipping insurance?",
@@ -108,7 +101,7 @@ export default function ShippingPage() {
                 +
               </span>
             </summary>
-            <p className="text-muted mt-3 leading-relaxed">{item.a}</p>
+            <p className="text-muted mt-3 leading-relaxed whitespace-pre-line">{item.a}</p>
           </details>
         ))}
       </div>

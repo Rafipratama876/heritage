@@ -32,8 +32,10 @@ export default function Footer() {
             Rizal <span className="italic text-brass">Heritage</span>
           </span>
           <p className="mt-4 text-sm text-muted max-w-xs leading-relaxed">
-            Hand-drawn batik, hand-loomed songket and tenun, and traditional
-            accessories, made by artisan workshops across Indonesia since 1998.
+          Since 1998, Rizal Heritage has been
+dedicated to preserving Indonesia’s
+textile heritage through a carefully
+curated collection .
           </p>
           <div className="flex items-center gap-4 mt-6 text-lg text-muted">
             <a
@@ -101,15 +103,17 @@ export default function Footer() {
         ))}
 
         <div>
-          <h3 className="eyebrow mb-4">Visit Our Store</h3>
+          <h3 className="eyebrow mb-4">Visit The Store</h3>
           <address className="not-italic text-sm text-ivory/80 leading-relaxed">
-            Pasar Mayestik Blok A Lantai Mezanine AKS 116 dan 110
+            Pasar Mayestik Blok A Lantai
             <br />
-            Jl. Tebah 1 No.117, RT.15/RW.3, Gunung
+            Mezanine AKS 116 dan 110, Jl. Tebah 1
             <br />
-            Kec. Kby. Baru, Kota Jakarta Selatan
+            No.117, RT.15/RW.3, Gunung, Kec. Kby.
             <br />
-            DKI Jakarta 12120
+            Baru, Kota Jakarta Selatan, Daerah 
+            <br />
+            Khusu Ibukota DKI Jakarta 12120
           </address>
           <a
             href="https://maps.app.goo.gl/bGSc6bT4EKW9yvfEA"
@@ -122,9 +126,10 @@ export default function Footer() {
           <address className="not-italic text-sm text-ivory/80 leading-relaxed mt-4">
             Ruko Pasar Mayestik (samping JNE)
             <br />
-            Jl. Tebah I No. 19, Kebayoran Baru, Jakarta Selatan
+            Jl. Tebah I No. 19, Kebayoran Baru, 
+            <br />
+            Jakarta Selatan
           </address>
-          <p className="text-sm text-muted mt-4">Mon–Sat, 09:00–17:00 WIB</p>
         </div>
       </div>
 
