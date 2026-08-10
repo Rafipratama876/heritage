@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { HiArrowRight, HiOutlineTruck, HiOutlineSparkles, HiOutlineGlobeAlt } from "react-icons/hi";
+import { HiArrowRight, HiOutlineLocationMarker, HiOutlineSparkles, HiOutlineGlobeAlt } from "react-icons/hi";
 import { GiSewingNeedle } from "react-icons/gi";
 import { FaFacebook } from "react-icons/fa";
 import { SiShopee } from "react-icons/si";
@@ -190,7 +190,7 @@ export default async function HomePage() {
       <section className="py-24 sm:py-32 bg-surface border-y border-line">
         <div className="container-content">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
-            <SectionHeading eyebrow="Behind the Craft" title="From the Gallery" />
+            <SectionHeading eyebrow="Behind the Craft" title="Moments & Memories" />
             <Link
               href="/gallery"
               className="hidden sm:inline-flex items-center gap-2 text-sm text-brass hover:text-ivory transition-colors"
@@ -218,15 +218,15 @@ export default async function HomePage() {
       <section className="container-content py-24 sm:py-32">
         <SectionHeading
           eyebrow="Why Rizal Heritage"
-          title="Made slow, on purpose."
+          title="Authentic textiles, carefully curated."
           align="center"
         />
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {[
-            { icon: GiSewingNeedle, title: "Handwoven, Not Printed", body: "No machine printing — every batik is wax-drawn or stamped, every songket hand-loomed thread by thread." },
-            { icon: HiOutlineSparkles, title: "Hand-Finished", body: "Dyeing, weaving, and finishing done entirely by hand in small workshop batches." },
-            { icon: HiOutlineGlobeAlt, title: "Shipped Worldwide", body: "Carefully packed and shipped to 18 countries, with tracked delivery on every order." },
-            { icon: HiOutlineTruck, title: "Direct From Workshop", body: "No middlemen — you order directly from the workshop that makes your piece." },
+            { icon: GiSewingNeedle, title: "100% Authentic Heritage Textiles", body: "Carefully sourced traditional textiles and accessories from across Indonesia, with a strong focus on authenticity and craftsmanship." },
+            { icon: HiOutlineSparkles, title: "Rare & Collector Pieces", body: "Our collection includes antique songket, vintage batik and other exceptional textiles that are increasingly difficult to find." },
+            { icon: HiOutlineGlobeAlt, title: "Shipped Worldwide", body: "Securely packed and shipped internationally, with tracked delivery available for every order." },
+            { icon: HiOutlineLocationMarker, title: "Direct From Our Store", body: "Purchase directly from Rizal Heritage in Mayestik Market, Jakarta, with personal assistance from our team." },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.08} className="text-center sm:text-left">
               <item.icon className="text-3xl text-brass mx-auto sm:mx-0" />
@@ -241,13 +241,18 @@ export default async function HomePage() {
       <section className="container-content pb-24 sm:pb-32">
         <Reveal>
           <div className="label-frame bg-surface px-8 py-16 sm:py-20 text-center flex flex-col items-center">
-            <p className="eyebrow mb-4">Ready to Order?</p>
+            <p className="eyebrow mb-4">Ready to Order</p>
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-ivory max-w-2xl">
-              Chat with our workshop directly on WhatsApp.
+              Chat with our team directly on WhatsApp.
             </h2>
             <p className="text-muted mt-4 max-w-md">
-              Ask about customization, lead time, or shipping to your
-              country — our team replies within a day.
+              Have questions about product condition, measurements,
+              shipping, or anything else? Our team is here to help and
+              typically replies within one business day.
+            </p>
+            <p className="text-muted mt-2 max-w-md text-sm">
+              Please log in to your account before placing an order via
+              WhatsApp.
             </p>
             <div className="mt-8">
               <WhatsAppOrderButton />

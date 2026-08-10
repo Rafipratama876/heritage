@@ -17,30 +17,26 @@ const ADDRESSES = [
     value:
       "Pasar Mayestik Blok A Lantai Mezanine AKS 116 dan 110, Jl. Tebah 1 No.117, RT.15/RW.3, Gunung, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12120",
     mapHref: "https://maps.app.goo.gl/bGSc6bT4EKW9yvfEA",
-  },
-  {
-    name: "Ruko Pasar Mayestik (samping JNE)",
-    value: "Jl. Tebah I No. 19 Kebayoran Baru, Jakarta Selatan",
-  },
+  }
 ];
 
 const CONTACT_ITEMS = [
   {
     icon: HiOutlineClock,
     label: "Business Hours",
-    value: "Monday – Saturday, 09:00 – 17:00 WIB",
+    value: "MONDAY - SUNDAY | 10.00 - 17.00 WIB",
   },
-  {
-    icon: HiOutlinePhone,
-    label: "Phone",
-    value: "+62 812-3456-7890",
-    href: "tel:+6281234567890",
-  },
+  // {
+  //   icon: HiOutlinePhone,
+  //   label: "Phone",
+  //   value: "+62 812-3456-7890",
+  //   href: "tel:+6281234567890",
+  // },
   {
     icon: HiOutlineMail,
     label: "Email",
-    value: "hello@rizalheritage.com",
-    href: "mailto:hello@rizalheritage.com",
+    value: "rizalhijazi@gmail.com",
+    href: "mailto:rizalhijazi@gmail.com",
   },
 ];
 
@@ -55,8 +51,8 @@ export default function ContactPage() {
           Contact Us
         </h1>
         <p className="text-muted mt-4">
-          Have a question about a piece, custom sizing, or shipping to your
-          country? Reach out — our team usually replies within a day.
+        Whether you’re looking for a rare textile, have questions about a product, or need assistance with international shipping,
+        our team is here to help. We typically respond within one business day.
         </p>
       </div>
 

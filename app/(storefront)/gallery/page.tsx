@@ -21,7 +21,7 @@ export default async function GalleryPage() {
       <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Gallery" }]} />
 
       <div className="mb-16 max-w-2xl">
-        <p className="eyebrow mb-3">Behind the Craft</p>
+        <p className="eyebrow mb-3">Moments &amp; Memories</p>
         <h1 className="font-display text-4xl sm:text-5xl text-ivory">
           Gallery
         </h1>
