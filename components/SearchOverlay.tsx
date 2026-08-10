@@ -99,8 +99,8 @@ export default function SearchOverlay({
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search batik, songket, kebaya, jewelry…"
-                  className="flex-1 bg-transparent font-display text-xl sm:text-2xl text-ivory placeholder:text-muted/70 focus:outline-none"
+                  placeholder="Search Any Indonesia Textile or Accessories ..."
+                  className="flex-1 bg-transparent font-display text-xl sm:text-2xl text-ivory placeholder:text-muted/70 focus:outline-none text-center"
                 />
                 <button
                   type="button"

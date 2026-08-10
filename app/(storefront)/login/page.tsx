@@ -52,8 +52,9 @@ export default function LoginPage() {
           <p className="eyebrow mb-3">Customer Access</p>
           <h1 className="font-display text-4xl text-ivory">Login</h1>
           <p className="text-muted mt-3 text-sm">
-            Browsing the catalog never requires an account — but you&apos;ll
-            need to log in to place an order.
+          You don’t need an account to browser our catalog.
+Sign in to save your details for a faster checkout
+and future orders.
           </p>
         </Reveal>
 
