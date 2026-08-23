@@ -1,70 +1,58 @@
-# Rizal Heritage
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-A modern, elegant product catalog SPA for a heritage furniture & craft brand, built with Next.js App Router, TypeScript, Tailwind CSS, and Framer Motion. No checkout — every order is completed via WhatsApp.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## Design direction
+## About Laravel
 
-"Museum label" catalog: a dark teak-and-parchment canvas (`#1C1712` / `#EDE6D6`) with a brass accent (`#C9A25D`), a Fraunces display serif paired with Plus Jakarta Sans, and product cards framed like gallery placards with catalog codes (`RH-014`). See `tailwind.config.ts` for the full token system.
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-## Getting started
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-```bash
-npm install
-npm run dev
-```
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-Open [http://localhost:3000](http://localhost:3000).
+## Learning Laravel
 
-> **Note:** `next/font/google` fetches fonts at build time and needs outbound internet access to `fonts.googleapis.com`. This works automatically on Vercel/Netlify. If you're building in a network-restricted environment, temporarily swap the `next/font/google` imports in `app/layout.tsx` for local/system fonts.
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-## Project structure
+In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-```
-app/                  Routes (App Router)
-  products/            Catalog listing + [slug] detail page
-  collections/          Collection listing + [slug] detail page
-  gallery/              Masonry gallery with lightbox
-  shipping/             Shipping & delivery info + FAQ
-  contact/              Contact info + map
-  login/                Customer login (UI only, no backend)
-components/           Reusable UI (Navbar, ProductCard, Lightbox, etc.)
-hooks/                 useDebounce, etc.
-lib/                   Dummy data (products, collections, gallery) + utils
-types/                 Shared TypeScript types
-```
+You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
 
-## Key features implemented
+## Agentic Development
 
-- Sticky navbar: transparent at top, blurred background on scroll, mobile menu, active-link indicator
-- Real-time debounced search + category/collection filters on `/products`
-- Product detail page with image gallery, keyboard/swipe-enabled lightbox, and specs table
-- "Order via WhatsApp" button that opens `wa.me` with a pre-filled message
-- Clickable breadcrumbs on every internal page
-- Masonry gallery with lightbox
-- Loading skeletons for the product grid, plus a global route-level spinner
-- SEO: Metadata API, Open Graph/Twitter cards, JSON-LD (Product/Store), `sitemap.ts`, `robots.ts`
-- Scroll-reveal and hover animations via Framer Motion, respecting `prefers-reduced-motion`
-- Dummy data only — swap `lib/products.ts`, `lib/collections.ts`, `lib/gallery.ts` for a real API/CMS later
-
-## Next steps (prepared for, not built)
-
-The architecture (typed data layer, `features/`-ready structure, login UI) is set up so you can later add: customer dashboard, wishlist, order history, notifications, a CMS-backed product source, admin panel, inventory, and analytics — without restructuring the app.
-
-## Backend API
-
-A Prisma + MySQL backend now lives in `backend/`, with a root-level `docker-compose.yml` to run
-MySQL, the API, and Adminer together. See `backend/README.md` for setup, environment variables,
-and the full API reference. Quick start:
+Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
 
 ```bash
-docker compose up --build -d
-docker compose run --rm seed   # loads the same catalog data used in lib/products.ts etc.
+composer require laravel/boost --dev
+
+php artisan boost:install
 ```
 
-## Before going live
+Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
-1. Set `NEXT_PUBLIC_WHATSAPP_NUMBER` in `.env` (or `.env.local`) to your real business number — digits only, country code first, no `+`/spaces/leading 0 (e.g. `62812xxxxxxx`). `lib/utils.ts` reads it from there, with a dummy fallback for local dev.
-2. Replace dummy Unsplash images with real product photography.
-3. Replace the Google Maps embed query in `app/contact/page.tsx` with your real address.
-4. Update `siteUrl` in `app/layout.tsx` and `app/sitemap.ts`/`app/robots.ts` to your real domain.
-5. Wire the login form to real authentication when you're ready to store customer accounts.
+## Contributing
+
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
