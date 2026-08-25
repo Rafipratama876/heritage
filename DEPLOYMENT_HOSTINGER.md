@@ -41,11 +41,11 @@ pwd
 ls
 ```
 
-You should see `public_html/` among the listed folders — that confirms
-you're in the account's home directory (commonly
-`/home/u806236373/domains/rizalheritage.com/` on multi-domain accounts, or
-just `/home/u806236373/` on single-domain ones — either way, `public_html`
-is the one that matters).
+**Confirmed for this account:** the real `public_html` lives at
+`/home/u806236373/domains/rizalheritage.com/public_html`, not directly in
+the home directory — `~` only holds a `domains/` folder plus config
+dotfiles. `~/laravel-app` (created in §5) sits in the home directory
+alongside `domains/`. Every path below already reflects this.
 
 ## 2. Set the right PHP version
 
@@ -70,12 +70,19 @@ database name, username, password (host is `localhost`).
 
 ## 5. Get the code onto the server
 
+> **Important — branch, not `main`.** GitHub's default branch on this repo
+> is `main`, but `main` is still the *old Next.js/Express codebase* — the
+> Laravel app lives entirely on the `refactor_into_laravel` branch, which
+> hasn't been merged in. Always specify `-b refactor_into_laravel`
+> explicitly (clone below, and every `git pull` in §11) or you'll end up
+> with the wrong app on the server.
+
 **With `git` available** (simplest — matches the earlier VPS-style
 approach, just without root):
 
 ```bash
 cd ~
-git clone https://github.com/Rafipratama876/heritage.git laravel-app
+git clone -b refactor_into_laravel https://github.com/Rafipratama876/heritage.git laravel-app
 # if the repo is private: username = your GitHub username,
 # password = a Personal Access Token from https://github.com/settings/tokens
 ```
@@ -116,11 +123,17 @@ symlink, keeping `app/`, `.env`, `vendor/`, etc. safely outside the
 publicly-served directory:
 
 ```bash
-cd ~
-mv public_html public_html_old        # back up whatever's there (Hostinger's default placeholder page)
-ln -s ~/laravel-app/public public_html
+mv ~/domains/rizalheritage.com/public_html ~/domains/rizalheritage.com/public_html_old
+ln -s ~/laravel-app/public ~/domains/rizalheritage.com/public_html
 ```
 
+Verify it points the right way:
+
+```bash
+ls -la ~/domains/rizalheritage.com/
+```
+
+— should show `public_html -> /home/u806236373/laravel-app/public`.
 (Delete `public_html_old` once you've confirmed the site works, or keep it
 around briefly as a safety net.)
 
@@ -181,16 +194,15 @@ minute**, command:
 cd /home/u806236373/laravel-app && php artisan schedule:run >> /dev/null 2>&1
 ```
 
-(Use the exact home-directory path you saw in §1's `pwd`/`ls` — adjust if
-your account nests under `domains/rizalheritage.com/`.) This single line
-covers the daily `insight:cleanup` job (and anything scheduled later) —
-Laravel's scheduler checks internally what's actually due each minute.
+This single line covers the daily `insight:cleanup` job (and anything
+scheduled later) — Laravel's scheduler checks internally what's actually
+due each minute.
 
 ## 11. Deploying updates later
 
 ```bash
 cd ~/laravel-app
-git pull origin main                        # if using the git route
+git pull origin refactor_into_laravel       # if using the git route — NOT main, see note in §5
 composer install --no-dev --optimize-autoloader
 npm ci && npm run build                      # or upload a locally-built public/build/
 php artisan migrate --force                  # only if new migrations were added

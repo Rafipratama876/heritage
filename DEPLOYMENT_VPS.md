@@ -120,6 +120,13 @@ Keep that password — it goes into `.env` in §6.
 
 ## 4. Get the code onto the server
 
+> **Important — branch, not `main`.** GitHub's default branch on this repo
+> is `main`, but `main` is still the *old Next.js/Express codebase* — the
+> Laravel app lives entirely on the `refactor_into_laravel` branch, which
+> hasn't been merged in. Always specify `-b refactor_into_laravel`
+> explicitly (clone below, and every `git pull` in §10) or you'll end up
+> with the wrong app on the server.
+
 This repo's GitHub remote is `git@github.com:Rafipratama876/heritage.git`.
 Two ways to pull it onto the VPS:
 
@@ -128,14 +135,14 @@ Two ways to pull it onto the VPS:
   ```bash
   sudo mkdir -p /var/www/rizal-heritage
   sudo chown deploy:deploy /var/www/rizal-heritage
-  git clone https://github.com/Rafipratama876/heritage.git /var/www/rizal-heritage
+  git clone -b refactor_into_laravel https://github.com/Rafipratama876/heritage.git /var/www/rizal-heritage
   # when prompted: username = your GitHub username, password = a token from
   # https://github.com/settings/tokens (classic token, "repo" scope)
   ```
 - **SSH deploy key** (no password prompt on future pulls — nicer for §10):
   generate a key on the VPS (`ssh-keygen -t ed25519 -C "vps-deploy"`), add
   the printed public key to the repo's **Settings → Deploy keys** on GitHub
-  (read-only is enough), then `git clone git@github.com:Rafipratama876/heritage.git /var/www/rizal-heritage`.
+  (read-only is enough), then `git clone -b refactor_into_laravel git@github.com:Rafipratama876/heritage.git /var/www/rizal-heritage`.
 
 From here on, `/var/www/rizal-heritage` is "the app" — adjust the path in
 every command below if you put it somewhere else.
@@ -292,7 +299,7 @@ Once this is all set up, shipping a code change is just:
 
 ```bash
 cd /var/www/rizal-heritage
-git pull origin main
+git pull origin refactor_into_laravel   # NOT main, see note in §4
 composer install --no-dev --optimize-autoloader
 npm ci && npm run build      # or rsync a locally-built public/build/, per §5
 php artisan migrate --force  # only if new migrations were added
