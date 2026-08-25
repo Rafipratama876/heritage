@@ -39,6 +39,13 @@ return [
         'property_id' => env('GA4_PROPERTY_ID'),
         'client_email' => env('GA4_CLIENT_EMAIL'),
         'private_key' => env('GA4_PRIVATE_KEY'),
+        // Public "G-XXXXXXX" tag — separate from the service-account creds
+        // above. Those are read-only (server-side, powers /admin/insight's
+        // GA4 section); this one is what actually sends real visitor data
+        // to Google in the first place, via the gtag.js snippet in
+        // resources/views/app.blade.php. Without this, the property stays
+        // empty no matter how correct the service-account creds are.
+        'measurement_id' => env('GA4_MEASUREMENT_ID'),
     ],
 
 ];

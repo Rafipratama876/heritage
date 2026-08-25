@@ -17,7 +17,11 @@ class UploadController extends Controller
     {
         $request->validate([
             'files' => ['required', 'array', 'max:10'],
-            'files.*' => ['image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'],
+            // Same ceiling as video's — 100MB (102400 KB) — for high-res
+            // product photography. Also needs the server's PHP
+            // upload_max_filesize/post_max_size raised to match (they
+            // default lower on shared hosting), see DEPLOYMENT_HOSTINGER.md.
+            'files.*' => ['image', 'mimes:jpg,jpeg,png,webp,gif', 'max:102400'],
         ]);
 
         $urls = collect($request->file('files'))->map(function ($file) {

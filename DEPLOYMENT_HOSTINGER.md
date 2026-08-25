@@ -53,6 +53,19 @@ hPanel → **Tingkat lanjut → PHP Configuration** → select **PHP 8.3** (or
 newer) for `rizalheritage.com`. This app's `composer.json` requires
 `^8.3` — Hostinger sometimes defaults new accounts to an older version.
 
+While you're in PHP Configuration, also raise the upload limits — the app
+allows images/videos up to 100MB each (`app/Http/Controllers/Admin/
+UploadController.php`), but PHP's own `upload_max_filesize` and
+`post_max_size` default lower on shared hosting and cap it regardless of
+what the app allows:
+
+- `upload_max_filesize` → at least `100M`
+- `post_max_size` → must be **larger** than `upload_max_filesize`, e.g.
+  `120M` (this is the ceiling for the whole request, not just the file)
+
+Verify over SSH any time with `php -i | grep -E
+"upload_max_filesize|post_max_size"`.
+
 ## 3. Check what's available over SSH
 
 ```bash
@@ -106,13 +119,42 @@ unzip laravel-app.zip -d laravel-app
 rm laravel-app.zip
 ```
 
-If you went the git route instead, still run the build step on the server
-(or locally + `rsync`/upload just `public/build/` — either is fine):
+If you went the git route instead, still install PHP deps on the server:
 
 ```bash
 cd ~/laravel-app
-composer install --no-dev --optimize-autoloader
+composer install --no-dev --optimize-autoloader --no-scripts
+php artisan package:discover --ansi
 ```
+
+**Node/`npm` is not available on this Hostinger plan's SSH** (confirmed:
+`npm: command not found`) — build the frontend on your own machine instead
+and upload just the `public/build/` folder it produces. From the repo root
+on your own machine:
+
+```bash
+npm run build
+rsync -avz -e "ssh -p PORT" public/build/ u806236373@145.223.108.254:~/laravel-app/public/build/
+# no rsync? scp works too: scp -P PORT -r public/build "u806236373@145.223.108.254:~/laravel-app/public/build"
+```
+
+(Replace `PORT` with the SSH port from §1.) Verify it landed:
+
+```bash
+ls -la ~/laravel-app/public/build/manifest.json   # run over SSH on the server
+```
+
+You'll repeat just this rsync step (no server-side npm needed) every time
+you change any frontend code — see §11.
+
+`--no-scripts` skips Composer's post-install hooks (`@php artisan
+package:discover`, etc. from `composer.json`) — Hostinger disables PHP's
+`proc_open()` on shared hosting by default, which those hooks need since
+Composer spawns them as a subprocess. Running `php artisan package:discover`
+directly afterward does the same thing without that restriction, since it's
+just a normal PHP invocation, not Composer spawning one. Check with
+`php -r "echo ini_get('disable_functions');"` if you want to confirm
+`proc_open` is actually the culprit before assuming this is why.
 
 ## 6. Point `public_html` at the app's `public/` folder
 
@@ -158,12 +200,23 @@ Then:
 ```bash
 php artisan key:generate
 php artisan migrate --force
-php artisan storage:link
 ```
 
 (`db:seed` is optional demo data only — skip it in production; the seeder's
 `fakerphp/faker` dependency isn't installed by `composer install --no-dev`
 anyway. Add real products through `/admin` instead.)
+
+**Don't run `php artisan storage:link`** — Hostinger disables both PHP's
+`symlink()` and `exec()` (same shared-hosting lockdown behind the
+`proc_open`/`--no-scripts` issue in §5), and that command needs one of
+them, failing with `Call to undefined function ... exec()`. Create the same
+symlink directly in the shell instead — `ln -s` here is an ordinary shell
+command, not a PHP function call, so none of that restriction applies:
+
+```bash
+ln -s ~/laravel-app/storage/app/public ~/laravel-app/public/storage
+ls -la ~/laravel-app/public/storage   # confirm it shows as a symlink pointing at .../storage/app/public
+```
 
 ## 8. Permissions
 
@@ -200,15 +253,27 @@ due each minute.
 
 ## 11. Deploying updates later
 
+On the server (over SSH):
+
 ```bash
 cd ~/laravel-app
 git pull origin refactor_into_laravel       # if using the git route — NOT main, see note in §5
-composer install --no-dev --optimize-autoloader
-npm ci && npm run build                      # or upload a locally-built public/build/
+composer install --no-dev --optimize-autoloader --no-scripts
+php artisan package:discover --ansi
 php artisan migrate --force                  # only if new migrations were added
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+```
+
+If any frontend code changed (`resources/js/`, `resources/css/`), also
+rebuild locally and re-sync — same as §5, `npm`/Node still isn't available
+on the server itself:
+
+```bash
+# on your own machine
+npm run build
+rsync -avz -e "ssh -p PORT" public/build/ u806236373@145.223.108.254:~/laravel-app/public/build/
 ```
 
 No service to restart on shared hosting (no `systemctl` access) — PHP-FPM
