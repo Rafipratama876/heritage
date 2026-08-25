@@ -60,6 +60,7 @@ class CollectionController extends Controller
             'tagline' => $collection->tagline,
             'description' => $collection->description,
             'image' => $collection->image,
+            'video_url' => $collection->video_url,
             ...($withChildren ? [
                 'children' => $collection->children->map(fn ($c) => $this->serialize($c)),
             ] : []),

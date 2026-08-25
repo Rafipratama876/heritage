@@ -1,7 +1,7 @@
 import { useCart } from '@/Providers/CartProvider';
 import { useWishlist } from '@/Providers/WishlistProvider';
 import { cn } from '@/lib/cn';
-import { formatIDR } from '@/lib/format';
+import { formatPrice, hasPrice } from '@/lib/format';
 import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { HiHeart, HiOutlineHeart, HiOutlineShoppingBag } from 'react-icons/hi';
@@ -15,7 +15,7 @@ export default function ProductCard({ product, index = 0 }) {
     function handleQuickAdd(e) {
         e.preventDefault();
         e.stopPropagation();
-        if (!product.available) return;
+        if (!product.available || !hasPrice(product.price)) return;
         addItem(product, 1);
     }
 
@@ -73,7 +73,7 @@ export default function ProductCard({ product, index = 0 }) {
                             <HiOutlineHeart className="text-base" />
                         )}
                     </button>
-                    {product.available && (
+                    {product.available && hasPrice(product.price) && (
                         <button
                             type="button"
                             aria-label={`Add ${product.name} to cart`}
@@ -90,7 +90,7 @@ export default function ProductCard({ product, index = 0 }) {
                         <h3 className="font-display text-lg text-ivory leading-snug">{product.name}</h3>
                     </div>
                 </div>
-                <p className="font-mono text-sm text-muted mt-2">{formatIDR(product.price)}</p>
+                <p className="font-mono text-sm text-muted mt-2">{formatPrice(product.price)}</p>
             </Link>
         </motion.div>
     );

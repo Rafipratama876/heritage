@@ -25,6 +25,7 @@ class GalleryController extends Controller
                 'description' => $item->description,
                 'date' => $item->date,
                 'image' => $item->image,
+                'video_url' => $item->video_url,
                 'tag' => ['value' => $item->tag, 'label' => GalleryTags::label($item->tag)],
             ]),
             'tags' => GalleryTags::options(),

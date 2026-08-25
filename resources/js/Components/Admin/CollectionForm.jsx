@@ -1,4 +1,5 @@
 import ImageUpload from '@/Components/Admin/ImageUpload';
+import VideoUpload from '@/Components/Admin/VideoUpload';
 import { cn } from '@/lib/cn';
 import { useForm } from '@inertiajs/react';
 
@@ -9,6 +10,7 @@ export default function CollectionForm({ mode, collection, parentOptions }) {
         tagline: collection?.tagline ?? '',
         description: collection?.description ?? '',
         image: collection?.image ?? '',
+        video_url: collection?.video_url ?? null,
         parent_id: collection?.parent_id ?? '',
     });
 
@@ -85,6 +87,16 @@ export default function CollectionForm({ mode, collection, parentOptions }) {
                     value={data.image ? [data.image] : []}
                     onChange={(urls) => setData('image', urls[0] ?? '')}
                 />
+                <p className="text-xs text-muted mt-1.5">
+                    Used on cards and listings everywhere this collection appears.
+                </p>
+            </Field>
+
+            <Field label="Video (optional)" error={errors.video_url}>
+                <VideoUpload value={data.video_url} onChange={(v) => setData('video_url', v)} />
+                <p className="text-xs text-muted mt-1.5">
+                    Shown only on this collection's detail page, alongside the cover image above.
+                </p>
             </Field>
 
             <button

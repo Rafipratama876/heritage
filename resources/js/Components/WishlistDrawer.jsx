@@ -1,6 +1,6 @@
 import { useCart } from '@/Providers/CartProvider';
 import { useWishlist } from '@/Providers/WishlistProvider';
-import { formatIDR } from '@/lib/format';
+import { formatPrice, hasPrice } from '@/lib/format';
 import { Link } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { HiOutlineHeart, HiOutlineShoppingBag, HiOutlineTrash, HiX } from 'react-icons/hi';
@@ -90,28 +90,30 @@ export default function WishlistDrawer() {
                                                     {item.name}
                                                 </Link>
                                                 <p className="font-mono text-sm text-muted mt-1">
-                                                    {formatIDR(item.price)}
+                                                    {formatPrice(item.price)}
                                                 </p>
 
                                                 <div className="flex items-center gap-3 mt-3">
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            addItem(
-                                                                {
-                                                                    id: item.productId,
-                                                                    slug: item.slug,
-                                                                    name: item.name,
-                                                                    price: item.price,
-                                                                    images: item.image ? [item.image] : [],
-                                                                },
-                                                                1
-                                                            )
-                                                        }
-                                                        className="flex items-center gap-1.5 text-xs text-ivory/80 hover:text-brass transition-colors border border-line px-3 py-1.5"
-                                                    >
-                                                        <HiOutlineShoppingBag /> Add to cart
-                                                    </button>
+                                                    {hasPrice(item.price) && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                addItem(
+                                                                    {
+                                                                        id: item.productId,
+                                                                        slug: item.slug,
+                                                                        name: item.name,
+                                                                        price: item.price,
+                                                                        images: item.image ? [item.image] : [],
+                                                                    },
+                                                                    1
+                                                                )
+                                                            }
+                                                            className="flex items-center gap-1.5 text-xs text-ivory/80 hover:text-brass transition-colors border border-line px-3 py-1.5"
+                                                        >
+                                                            <HiOutlineShoppingBag /> Add to cart
+                                                        </button>
+                                                    )}
                                                     <button
                                                         type="button"
                                                         aria-label={`Remove ${item.name} from wishlist`}

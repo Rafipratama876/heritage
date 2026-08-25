@@ -78,6 +78,9 @@ class CollectionController extends Controller
             'tagline' => ['required', 'string'],
             'description' => ['required', 'string'],
             'image' => ['required', 'url'],
+            // Optional — a promo video shown on the collection's detail
+            // page, alongside (not instead of) the required cover image.
+            'video_url' => ['nullable', 'url'],
             'parent_id' => ['nullable', 'integer', 'exists:collections,id'],
         ]);
     }
@@ -91,6 +94,7 @@ class CollectionController extends Controller
             'tagline' => $collection->tagline,
             'description' => $collection->description,
             'image' => $collection->image,
+            'video_url' => $collection->video_url,
             'parent' => $collection->parent ? ['slug' => $collection->parent->slug, 'name' => $collection->parent->name] : null,
             'products_count' => $collection->products_count ?? null,
             ...($withParentId ? ['parent_id' => $collection->parent_id] : []),

@@ -36,6 +36,19 @@ export default function CollectionShow({ collection }) {
                 </div>
 
                 <div className="container-content py-20">
+                    {collection.video_url && (
+                        <div className="mb-14">
+                            <p className="eyebrow mb-4">Watch</p>
+                            <div className="label-frame bg-surface overflow-hidden aspect-video max-w-3xl">
+                                <video
+                                    src={collection.video_url}
+                                    controls
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     {!!collection.children?.length && (
                         <div className="mb-14">
                             <p className="eyebrow mb-4">Sub-Collections</p>

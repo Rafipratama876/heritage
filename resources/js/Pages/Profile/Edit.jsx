@@ -1,39 +1,41 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Breadcrumb from '@/Components/Breadcrumb';
+import Reveal from '@/Components/Reveal';
+import StorefrontLayout from '@/Layouts/StorefrontLayout';
 import { Head } from '@inertiajs/react';
 import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 
-export default function Edit({ mustVerifyEmail, status }) {
+export default function Edit({ status }) {
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Profile
-                </h2>
-            }
-        >
-            <Head title="Profile" />
+        <StorefrontLayout>
+            <Head title="My Account" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                        <UpdateProfileInformationForm
-                            mustVerifyEmail={mustVerifyEmail}
-                            status={status}
-                            className="max-w-xl"
-                        />
-                    </div>
+            <div className="container-content pt-32 pb-24">
+                <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'My Account' }]} />
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                        <UpdatePasswordForm className="max-w-xl" />
-                    </div>
+                <div className="max-w-xl mx-auto">
+                    <Reveal className="text-center mb-10">
+                        <p className="eyebrow mb-3">Customer Access</p>
+                        <h1 className="font-display text-4xl text-ivory">My Account</h1>
+                        <p className="text-muted mt-3 text-sm">
+                            Update your details, change your password, or close your account.
+                        </p>
+                    </Reveal>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                        <DeleteUserForm className="max-w-xl" />
-                    </div>
+                    <Reveal delay={0.08} className="label-frame bg-surface p-8">
+                        <UpdateProfileInformationForm status={status} />
+                    </Reveal>
+
+                    <Reveal delay={0.12} className="label-frame bg-surface p-8 mt-8">
+                        <UpdatePasswordForm />
+                    </Reveal>
+
+                    <Reveal delay={0.16} className="border border-clay/40 p-8 mt-8">
+                        <DeleteUserForm />
+                    </Reveal>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </StorefrontLayout>
     );
 }

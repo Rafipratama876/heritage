@@ -75,7 +75,13 @@ class ProductController extends Controller
             'code' => ['required', 'string', Rule::unique('products', 'code')->ignore($product)],
             'slug' => ['required', 'string', Rule::unique('products', 'slug')->ignore($product)],
             'name' => ['required', 'string'],
-            'price' => ['required', 'integer', 'min:0'],
+            // Nullable — a product without a price shows "Hubungi Kami"
+            // on the storefront instead of Add to Cart. ProductForm.jsx's
+            // "price not available" checkbox sends price as null; when
+            // it's unchecked the frontend's own `required` attribute on
+            // the number input keeps a normal entry mandatory, and this
+            // rule re-validates that server-side in store()/update().
+            'price' => ['nullable', 'integer', 'min:0'],
             'short_description' => ['required', 'string'],
             'description' => ['required', 'string'],
             'featured' => ['boolean'],
@@ -99,7 +105,7 @@ class ProductController extends Controller
             'code' => $data['code'],
             'slug' => $data['slug'],
             'name' => $data['name'],
-            'price' => $data['price'],
+            'price' => $data['price'] ?? null,
             'short_description' => $data['short_description'],
             'description' => $data['description'],
             'featured' => $data['featured'] ?? false,

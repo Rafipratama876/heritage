@@ -7,6 +7,7 @@ use App\Models\GalleryItem;
 use App\Support\GalleryTags;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -57,14 +58,26 @@ class GalleryController extends Controller
 
     private function validateData(Request $request, ?GalleryItem $item = null): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'slug' => ['required', 'string', Rule::unique('gallery_items', 'slug')->ignore($item)],
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
             'date' => ['required', 'string'],
-            'image' => ['required', 'url'],
+            // Neither is required on its own — an item just needs at
+            // least one of the two (checked below), matching the "a
+            // gallery item can be a photo or a video" behavior.
+            'image' => ['nullable', 'url'],
+            'video_url' => ['nullable', 'url'],
             'tag' => [Rule::in(array_keys(GalleryTags::LABELS))],
         ]);
+
+        if (blank($data['image'] ?? null) && blank($data['video_url'] ?? null)) {
+            throw ValidationException::withMessages([
+                'image' => 'Add either an image or a video for this gallery item.',
+            ]);
+        }
+
+        return $data;
     }
 
     private function serialize(GalleryItem $item): array
@@ -75,6 +88,7 @@ class GalleryController extends Controller
             'description' => $item->description,
             'date' => $item->date,
             'image' => $item->image,
+            'video_url' => $item->video_url,
             'tag' => $item->tag,
             'tag_label' => GalleryTags::label($item->tag),
         ];

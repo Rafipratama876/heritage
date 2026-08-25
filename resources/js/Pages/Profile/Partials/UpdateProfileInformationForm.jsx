@@ -1,111 +1,109 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Transition } from '@headlessui/react';
-import { Link, useForm, usePage } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
+import { HiOutlineLocationMarker, HiOutlineMail, HiOutlinePhone, HiOutlineUser } from 'react-icons/hi';
 
-export default function UpdateProfileInformation({
-    mustVerifyEmail,
-    status,
-    className = '',
-}) {
+export default function UpdateProfileInformation() {
     const user = usePage().props.auth.user;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } =
-        useForm({
-            name: user.name,
-            email: user.email,
-        });
+    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+        name: user.name,
+        email: user.email,
+        phone: user.phone ?? '',
+        address: user.address ?? '',
+    });
 
-    const submit = (e) => {
+    function submit(e) {
         e.preventDefault();
-
         patch(route('profile.update'));
-    };
+    }
 
     return (
-        <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Profile Information
-                </h2>
+        <section>
+            <p className="eyebrow mb-1">Account Details</p>
+            <h2 className="font-display text-xl text-ivory">Profile Information</h2>
+            <p className="text-sm text-muted mt-1">
+                Update your name, email address, and phone number.
+            </p>
 
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Update your account's profile information and email address.
-                </p>
-            </header>
-
-            <form onSubmit={submit} className="mt-6 space-y-6">
+            <form onSubmit={submit} className="mt-6 space-y-5">
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
-                    <TextInput
-                        id="name"
-                        className="mt-1 block w-full"
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                        isFocused
-                        autoComplete="name"
-                    />
-
-                    <InputError className="mt-2" message={errors.name} />
-                </div>
-
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        className="mt-1 block w-full"
-                        value={data.email}
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                        autoComplete="username"
-                    />
-
-                    <InputError className="mt-2" message={errors.email} />
-                </div>
-
-                {mustVerifyEmail && user.email_verified_at === null && (
-                    <div>
-                        <p className="mt-2 text-sm text-gray-800 dark:text-gray-200">
-                            Your email address is unverified.
-                            <Link
-                                href={route('verification.send')}
-                                method="post"
-                                as="button"
-                                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-                            >
-                                Click here to re-send the verification email.
-                            </Link>
-                        </p>
-
-                        {status === 'verification-link-sent' && (
-                            <div className="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
-                                A new verification link has been sent to your
-                                email address.
-                            </div>
-                        )}
+                    <label htmlFor="name" className="eyebrow block mb-2">
+                        Full Name
+                    </label>
+                    <div className="relative">
+                        <HiOutlineUser className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                        <input
+                            id="name"
+                            type="text"
+                            required
+                            autoComplete="name"
+                            value={data.name}
+                            onChange={(e) => setData('name', e.target.value)}
+                            className="w-full bg-canvas border border-line pl-11 pr-4 py-3.5 text-sm text-ivory placeholder:text-muted focus:border-brass outline-none transition-colors"
+                        />
                     </div>
-                )}
+                    {errors.name && <p className="text-clay text-sm mt-1">{errors.name}</p>}
+                </div>
+
+                <div>
+                    <label htmlFor="email" className="eyebrow block mb-2">
+                        Email
+                    </label>
+                    <div className="relative">
+                        <HiOutlineMail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                        <input
+                            id="email"
+                            type="email"
+                            required
+                            autoComplete="username"
+                            value={data.email}
+                            onChange={(e) => setData('email', e.target.value)}
+                            className="w-full bg-canvas border border-line pl-11 pr-4 py-3.5 text-sm text-ivory placeholder:text-muted focus:border-brass outline-none transition-colors"
+                        />
+                    </div>
+                    {errors.email && <p className="text-clay text-sm mt-1">{errors.email}</p>}
+                </div>
+
+                <div>
+                    <label htmlFor="phone" className="eyebrow block mb-2">
+                        Phone <span className="text-muted font-normal">(optional)</span>
+                    </label>
+                    <div className="relative">
+                        <HiOutlinePhone className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                        <input
+                            id="phone"
+                            type="tel"
+                            value={data.phone}
+                            onChange={(e) => setData('phone', e.target.value)}
+                            placeholder="+62 812-3456-7890"
+                            className="w-full bg-canvas border border-line pl-11 pr-4 py-3.5 text-sm text-ivory placeholder:text-muted focus:border-brass outline-none transition-colors"
+                        />
+                    </div>
+                    {errors.phone && <p className="text-clay text-sm mt-1">{errors.phone}</p>}
+                </div>
+
+                <div>
+                    <label htmlFor="address" className="eyebrow block mb-2">
+                        Shipping Address <span className="text-muted font-normal">(optional)</span>
+                    </label>
+                    <div className="relative">
+                        <HiOutlineLocationMarker className="absolute left-4 top-4 text-muted" />
+                        <textarea
+                            id="address"
+                            rows={3}
+                            value={data.address}
+                            onChange={(e) => setData('address', e.target.value)}
+                            placeholder="Street, city, postal code, province"
+                            className="w-full bg-canvas border border-line pl-11 pr-4 py-3.5 text-sm text-ivory placeholder:text-muted focus:border-brass outline-none transition-colors resize-none"
+                        />
+                    </div>
+                    {errors.address && <p className="text-clay text-sm mt-1">{errors.address}</p>}
+                </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
-
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Saved.
-                        </p>
-                    </Transition>
+                    <button type="submit" disabled={processing} className="btn-primary !py-3 !px-6 text-sm disabled:opacity-60">
+                        Save Changes
+                    </button>
+                    {recentlySuccessful && <p className="text-sm text-brass">Saved.</p>}
                 </div>
             </form>
         </section>

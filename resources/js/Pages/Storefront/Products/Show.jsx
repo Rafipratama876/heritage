@@ -7,7 +7,7 @@ import SectionHeading from '@/Components/SectionHeading';
 import ShareButton from '@/Components/ShareButton';
 import WhatsAppOrderButton from '@/Components/WhatsAppOrderButton';
 import StorefrontLayout from '@/Layouts/StorefrontLayout';
-import { formatIDR } from '@/lib/format';
+import { formatPrice, hasPrice } from '@/lib/format';
 import { Head, Link } from '@inertiajs/react';
 
 export default function ProductShow({ product, related }) {
@@ -41,7 +41,7 @@ export default function ProductShow({ product, related }) {
                         <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-ivory leading-tight">
                             {product.name}
                         </h1>
-                        <p className="font-mono text-xl text-brass mt-4">{formatIDR(product.price)}</p>
+                        <p className="font-mono text-xl text-brass mt-4">{formatPrice(product.price)}</p>
                         {!product.available && (
                             <p className="inline-block mt-4 font-mono text-xs tracking-widest2 text-clay border border-clay px-2.5 py-1">
                                 CURRENTLY UNAVAILABLE
@@ -50,7 +50,19 @@ export default function ProductShow({ product, related }) {
                         <p className="text-muted mt-6 leading-relaxed">{product.description}</p>
 
                         <div className="mt-8 space-y-3">
-                            {product.available ? (
+                            {!product.available ? (
+                                <div className="flex items-center gap-3">
+                                    <p className="flex-1 text-sm text-muted border border-line px-4 py-4">
+                                        This piece isn&apos;t available right now — check back later or
+                                        ask us on WhatsApp about similar pieces.
+                                    </p>
+                                    <ShareButton
+                                        productId={product.id}
+                                        title={product.name}
+                                        text={product.short_description}
+                                    />
+                                </div>
+                            ) : hasPrice(product.price) ? (
                                 <>
                                     <AddToCartForm product={product} />
                                     <div className="flex items-center gap-3">
@@ -68,17 +80,25 @@ export default function ProductShow({ product, related }) {
                                     </div>
                                 </>
                             ) : (
-                                <div className="flex items-center gap-3">
-                                    <p className="flex-1 text-sm text-muted border border-line px-4 py-4">
-                                        This piece isn&apos;t available right now — check back later or
-                                        ask us on WhatsApp about similar pieces.
+                                <>
+                                    <p className="text-sm text-muted border border-line px-4 py-4">
+                                        This piece is priced on request — chat with us on WhatsApp and
+                                        we&apos;ll get back to you.
                                     </p>
-                                    <ShareButton
-                                        productId={product.id}
-                                        title={product.name}
-                                        text={product.short_description}
-                                    />
-                                </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex-1">
+                                            <WhatsAppOrderButton
+                                                productId={product.id}
+                                                productName={product.name}
+                                            />
+                                        </div>
+                                        <ShareButton
+                                            productId={product.id}
+                                            title={product.name}
+                                            text={product.short_description}
+                                        />
+                                    </div>
+                                </>
                             )}
                         </div>
 

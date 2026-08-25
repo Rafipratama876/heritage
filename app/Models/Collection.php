@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['slug', 'name', 'tagline', 'description', 'image', 'parent_id'])]
+#[Fillable(['slug', 'name', 'tagline', 'description', 'image', 'video_url', 'parent_id'])]
 class Collection extends Model
 {
     use HasFactory;

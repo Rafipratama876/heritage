@@ -144,9 +144,12 @@ export default function Navbar() {
                     <div className="hidden lg:flex items-center gap-3">
                         {auth?.user ? (
                             <>
-                                <span className="text-sm text-ivory/80">
+                                <Link
+                                    href="/profile"
+                                    className="text-sm text-ivory/80 hover:text-brass transition-colors"
+                                >
                                     Hi, {auth.user.name.split(' ')[0]}
-                                </span>
+                                </Link>
                                 {auth.user.role === 'admin' && (
                                     <Link href="/admin" className="btn-outline !px-5 !py-2.5 text-xs">
                                         Admin
@@ -213,14 +216,23 @@ export default function Navbar() {
                             })}
                             <li>
                                 {auth?.user ? (
-                                    <button
-                                        type="button"
-                                        tabIndex={open ? undefined : -1}
-                                        onClick={logout}
-                                        className="block py-3 text-base text-ivory/85 w-full text-left"
-                                    >
-                                        Logout ({auth.user.name.split(' ')[0]})
-                                    </button>
+                                    <>
+                                        <Link
+                                            href="/profile"
+                                            tabIndex={open ? undefined : -1}
+                                            className="block py-3 text-base text-ivory/85 border-b border-line/60"
+                                        >
+                                            My Account ({auth.user.name.split(' ')[0]})
+                                        </Link>
+                                        <button
+                                            type="button"
+                                            tabIndex={open ? undefined : -1}
+                                            onClick={logout}
+                                            className="block py-3 text-base text-ivory/85 w-full text-left"
+                                        >
+                                            Logout
+                                        </button>
+                                    </>
                                 ) : (
                                     <>
                                         <Link

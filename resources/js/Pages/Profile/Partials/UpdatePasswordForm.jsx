@@ -1,30 +1,18 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import { useRef } from 'react';
+import { HiOutlineLockClosed } from 'react-icons/hi';
 
-export default function UpdatePasswordForm({ className = '' }) {
+export default function UpdatePasswordForm() {
     const passwordInput = useRef();
     const currentPasswordInput = useRef();
 
-    const {
-        data,
-        setData,
-        errors,
-        put,
-        reset,
-        processing,
-        recentlySuccessful,
-    } = useForm({
+    const { data, setData, errors, put, reset, processing, recentlySuccessful } = useForm({
         current_password: '',
         password: '',
         password_confirmation: '',
     });
 
-    const updatePassword = (e) => {
+    function updatePassword(e) {
         e.preventDefault();
 
         put(route('password.update'), {
@@ -35,106 +23,88 @@ export default function UpdatePasswordForm({ className = '' }) {
                     reset('password', 'password_confirmation');
                     passwordInput.current.focus();
                 }
-
                 if (errors.current_password) {
                     reset('current_password');
                     currentPasswordInput.current.focus();
                 }
             },
         });
-    };
+    }
 
     return (
-        <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Update Password
-                </h2>
+        <section>
+            <p className="eyebrow mb-1">Security</p>
+            <h2 className="font-display text-xl text-ivory">Update Password</h2>
+            <p className="text-sm text-muted mt-1">
+                Ensure your account is using a long, random password to stay secure.
+            </p>
 
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Ensure your account is using a long, random password to stay
-                    secure.
-                </p>
-            </header>
-
-            <form onSubmit={updatePassword} className="mt-6 space-y-6">
+            <form onSubmit={updatePassword} className="mt-6 space-y-5">
                 <div>
-                    <InputLabel
-                        htmlFor="current_password"
-                        value="Current Password"
-                    />
-
-                    <TextInput
-                        id="current_password"
-                        ref={currentPasswordInput}
-                        value={data.current_password}
-                        onChange={(e) =>
-                            setData('current_password', e.target.value)
-                        }
-                        type="password"
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                    />
-
-                    <InputError
-                        message={errors.current_password}
-                        className="mt-2"
-                    />
+                    <label htmlFor="current_password" className="eyebrow block mb-2">
+                        Current Password
+                    </label>
+                    <div className="relative">
+                        <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                        <input
+                            id="current_password"
+                            ref={currentPasswordInput}
+                            type="password"
+                            autoComplete="current-password"
+                            value={data.current_password}
+                            onChange={(e) => setData('current_password', e.target.value)}
+                            className="w-full bg-canvas border border-line pl-11 pr-4 py-3.5 text-sm text-ivory placeholder:text-muted focus:border-brass outline-none transition-colors"
+                        />
+                    </div>
+                    {errors.current_password && (
+                        <p className="text-clay text-sm mt-1">{errors.current_password}</p>
+                    )}
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="password" value="New Password" />
-
-                    <TextInput
-                        id="password"
-                        ref={passwordInput}
-                        value={data.password}
-                        onChange={(e) => setData('password', e.target.value)}
-                        type="password"
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
+                    <label htmlFor="password" className="eyebrow block mb-2">
+                        New Password
+                    </label>
+                    <div className="relative">
+                        <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                        <input
+                            id="password"
+                            ref={passwordInput}
+                            type="password"
+                            autoComplete="new-password"
+                            value={data.password}
+                            onChange={(e) => setData('password', e.target.value)}
+                            className="w-full bg-canvas border border-line pl-11 pr-4 py-3.5 text-sm text-ivory placeholder:text-muted focus:border-brass outline-none transition-colors"
+                        />
+                    </div>
+                    {errors.password && <p className="text-clay text-sm mt-1">{errors.password}</p>}
                 </div>
 
                 <div>
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
-                    <TextInput
-                        id="password_confirmation"
-                        value={data.password_confirmation}
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                        type="password"
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                    />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
+                    <label htmlFor="password_confirmation" className="eyebrow block mb-2">
+                        Confirm Password
+                    </label>
+                    <div className="relative">
+                        <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                        <input
+                            id="password_confirmation"
+                            type="password"
+                            autoComplete="new-password"
+                            value={data.password_confirmation}
+                            onChange={(e) => setData('password_confirmation', e.target.value)}
+                            className="w-full bg-canvas border border-line pl-11 pr-4 py-3.5 text-sm text-ivory placeholder:text-muted focus:border-brass outline-none transition-colors"
+                        />
+                    </div>
+                    {errors.password_confirmation && (
+                        <p className="text-clay text-sm mt-1">{errors.password_confirmation}</p>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
-
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Saved.
-                        </p>
-                    </Transition>
+                    <button type="submit" disabled={processing} className="btn-primary !py-3 !px-6 text-sm disabled:opacity-60">
+                        Save Changes
+                    </button>
+                    {recentlySuccessful && <p className="text-sm text-brass">Saved.</p>}
                 </div>
             </form>
         </section>

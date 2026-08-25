@@ -2,6 +2,7 @@ import ImageUpload from '@/Components/Admin/ImageUpload';
 import VideoUpload from '@/Components/Admin/VideoUpload';
 import { cn } from '@/lib/cn';
 import { useForm } from '@inertiajs/react';
+import { useState } from 'react';
 import { HiOutlineTrash, HiPlus } from 'react-icons/hi';
 
 export default function ProductForm({ mode, product, categories, collections }) {
@@ -20,6 +21,16 @@ export default function ProductForm({ mode, product, categories, collections }) 
         featured: product?.featured ?? false,
         available: product?.available ?? true,
     });
+
+    // "Price not available yet" — sets price to null instead of a number,
+    // which the storefront shows as "Hubungi Kami" and hides Add to Cart
+    // for (see resources/js/lib/format.js#hasPrice).
+    const [noPrice, setNoPrice] = useState(mode === 'edit' && product?.price == null);
+
+    function toggleNoPrice(checked) {
+        setNoPrice(checked);
+        setData('price', checked ? null : '');
+    }
 
     function toggleArrayValue(field, value) {
         setData(
@@ -85,10 +96,21 @@ export default function ProductForm({ mode, product, categories, collections }) 
                 <input
                     type="number"
                     min={0}
-                    value={data.price}
+                    value={noPrice ? '' : data.price}
                     onChange={(e) => setData('price', Number(e.target.value))}
-                    className="input"
+                    disabled={noPrice}
+                    required={!noPrice}
+                    className="input disabled:opacity-50"
                 />
+                <label className="flex items-center gap-2 text-sm text-ivory/80 mt-2">
+                    <input
+                        type="checkbox"
+                        checked={noPrice}
+                        onChange={(e) => toggleNoPrice(e.target.checked)}
+                        className="accent-brass"
+                    />
+                    Price not available yet (shows "Hubungi Kami" and hides Add to Cart)
+                </label>
             </Field>
 
             <Field label="Categories (select one or more)" error={errors.categories}>

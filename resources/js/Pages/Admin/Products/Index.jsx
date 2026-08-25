@@ -1,6 +1,6 @@
 import { useToast } from '@/Providers/ToastProvider';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { formatIDR } from '@/lib/format';
+import { formatIDR, hasPrice } from '@/lib/format';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { HiOutlinePencil, HiOutlineTrash, HiPlus } from 'react-icons/hi';
@@ -36,8 +36,8 @@ export default function Index({ products }) {
             {products.length === 0 ? (
                 <p className="text-muted text-sm">No products yet.</p>
             ) : (
-                <div className="border border-line">
-                    <table className="w-full text-sm">
+                <div className="border border-line overflow-x-auto">
+                    <table className="w-full text-sm min-w-[640px]">
                         <thead>
                             <tr className="border-b border-line text-left">
                                 <th className="p-3 font-normal text-muted w-16"></th>
@@ -80,7 +80,11 @@ export default function Index({ products }) {
                                         {p.collections.map((c) => c.name).join(', ')}
                                     </td>
                                     <td className="p-3 text-ivory text-right font-mono">
-                                        {formatIDR(p.price)}
+                                        {hasPrice(p.price) ? (
+                                            formatIDR(p.price)
+                                        ) : (
+                                            <span className="text-muted">No price set</span>
+                                        )}
                                     </td>
                                     <td className="p-3">
                                         <div className="flex items-center justify-end gap-2">

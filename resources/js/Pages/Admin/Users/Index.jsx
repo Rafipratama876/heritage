@@ -39,8 +39,8 @@ export default function Index({ users }) {
             <p className="eyebrow mb-2">Accounts</p>
             <h1 className="font-display text-3xl text-ivory mb-8">Users</h1>
 
-            <div className="border border-line">
-                <table className="w-full text-sm">
+            <div className="border border-line overflow-x-auto">
+                <table className="w-full text-sm min-w-[560px]">
                     <thead>
                         <tr className="border-b border-line text-left">
                             <th className="p-3 font-normal text-muted">Name</th>

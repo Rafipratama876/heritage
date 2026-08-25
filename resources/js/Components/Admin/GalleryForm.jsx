@@ -1,4 +1,5 @@
 import ImageUpload from '@/Components/Admin/ImageUpload';
+import VideoUpload from '@/Components/Admin/VideoUpload';
 import { cn } from '@/lib/cn';
 import { useForm } from '@inertiajs/react';
 
@@ -9,6 +10,7 @@ export default function GalleryForm({ mode, item, tags }) {
         description: item?.description ?? '',
         date: item?.date ?? '',
         image: item?.image ?? '',
+        video_url: item?.video_url ?? null,
         tag: item?.tag ?? tags[0]?.value ?? '',
     });
 
@@ -80,6 +82,14 @@ export default function GalleryForm({ mode, item, tags }) {
                     value={data.image ? [data.image] : []}
                     onChange={(urls) => setData('image', urls[0] ?? '')}
                 />
+                <p className="text-xs text-muted mt-1.5">
+                    Used as the thumbnail everywhere, and as the poster frame if this item is a
+                    video. At least an image or a video below is required.
+                </p>
+            </Field>
+
+            <Field label="Video (optional)">
+                <VideoUpload value={data.video_url} onChange={(v) => setData('video_url', v)} />
             </Field>
 
             <button

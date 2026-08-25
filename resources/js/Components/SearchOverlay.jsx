@@ -1,4 +1,4 @@
-import { formatIDR } from '@/lib/format';
+import { formatPrice } from '@/lib/format';
 import { trackSearch } from '@/lib/track';
 import { Link, router } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -117,7 +117,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
                                                             {product.name}
                                                         </p>
                                                         <p className="font-mono text-xs text-muted mt-0.5">
-                                                            {formatIDR(product.price)}
+                                                            {formatPrice(product.price)}
                                                         </p>
                                                     </div>
                                                 </Link>
