@@ -2,8 +2,11 @@ import ProductCard from '@/Components/ProductCard';
 import Reveal from '@/Components/Reveal';
 import SectionHeading from '@/Components/SectionHeading';
 import WhatsAppOrderButton from '@/Components/WhatsAppOrderButton';
+import { cn } from '@/lib/cn';
 import StorefrontLayout from '@/Layouts/StorefrontLayout';
 import { Head, Link } from '@inertiajs/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
 import { FaFacebook } from 'react-icons/fa';
 import { GiSewingNeedle } from 'react-icons/gi';
 import { HiArrowRight, HiOutlineGlobeAlt, HiOutlineLocationMarker, HiOutlineSparkles } from 'react-icons/hi';
@@ -33,6 +36,8 @@ const WHY_ITEMS = [
 ];
 
 export default function Home({ featuredProducts, collections, galleryItems }) {
+    const [storyExpanded, setStoryExpanded] = useState(false);
+
     return (
         <StorefrontLayout>
             <Head title="Rizal Heritage" />
@@ -131,15 +136,40 @@ export default function Home({ featuredProducts, collections, galleryItems }) {
                         collecting, studying, and preserving some of the country&rsquo;s finest
                         handwoven and batik masterpieces.
                     </p>
-                    <p className="mt-4 text-muted leading-relaxed">
-                        His journey began in Palembang, where he assisted his brother-in-law in
-                        sourcing Songket Palembang to be resold. What started as learning the trade
-                        quickly grew into a lifelong calling. By 2000, they opened their first store
-                        together in Blok M, Jakarta, introducing authentic Palembang Songket to a wider
-                        audience. After three years, the business moved to Pasar Mayestik, where Rizal
-                        Heritage continues to welcome collectors, designers, and textile enthusiasts
-                        from around the world.
-                    </p>
+
+                    <AnimatePresence initial={false}>
+                        {storyExpanded && (
+                            <motion.div
+                                key="story-more"
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                                className="overflow-hidden"
+                            >
+                                <p className="mt-4 text-muted leading-relaxed">
+                                    His journey began in Palembang, where he assisted his
+                                    brother-in-law in sourcing Songket Palembang to be resold. What
+                                    started as learning the trade quickly grew into a lifelong
+                                    calling. By 2000, they opened their first store together in Blok
+                                    M, Jakarta, introducing authentic Palembang Songket to a wider
+                                    audience. After three years, the business moved to Pasar
+                                    Mayestik, where Rizal Heritage continues to welcome collectors,
+                                    designers, and textile enthusiasts from around the world.
+                                </p>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    <button
+                        type="button"
+                        onClick={() => setStoryExpanded((v) => !v)}
+                        aria-expanded={storyExpanded}
+                        className="mt-5 inline-flex items-center gap-1.5 text-sm text-brass hover:text-ivory transition-colors"
+                    >
+                        {storyExpanded ? 'Show less' : 'Read more'}
+                        <HiArrowRight className={cn('transition-transform', storyExpanded && 'rotate-90')} />
+                    </button>
                 </div>
             </section>
 
