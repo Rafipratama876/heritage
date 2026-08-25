@@ -140,7 +140,8 @@ const productSchema = z.object({
   code: z.string().min(1),
   slug: z.string().min(1),
   name: z.string().min(1),
-  price: z.number().int().nonnegative(),
+  // null = "no price" (display/inquiry-only listing)
+  price: z.number().int().nonnegative().nullable(),
   shortDescription: z.string().min(1),
   description: z.string().min(1),
   collectionSlugs: z.array(z.string().min(1)).min(1),

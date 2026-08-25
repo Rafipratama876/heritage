@@ -1,4 +1,7 @@
-export function formatIDR(value: number): string {
+// A null/undefined price means the product is listed as "no price" —
+// display/inquiry-only, no number to format.
+export function formatIDR(value: number | null | undefined): string {
+  if (value == null) return "Contact for price";
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",

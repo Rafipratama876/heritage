@@ -62,16 +62,19 @@ export default function ProductsClient({
         );
       const matchesCategory = category === "all" || p.categories.includes(category as any);
       const matchesCollection = collection === "all" || p.collections.includes(collection);
-      const matchesMin = min === null || Number.isNaN(min) || p.price >= min;
-      const matchesMax = max === null || Number.isNaN(max) || p.price <= max;
+      // Products with no price are excluded once a price filter is set —
+      // there's nothing to compare against.
+      const matchesMin = min === null || Number.isNaN(min) || (p.price !== null && p.price >= min);
+      const matchesMax = max === null || Number.isNaN(max) || (p.price !== null && p.price <= max);
       return matchesQuery && matchesCategory && matchesCollection && matchesMin && matchesMax;
     });
 
     const sorted = [...result];
     if (sortBy === "price-asc") {
-      sorted.sort((a, b) => a.price - b.price);
+      // No-price products sort to the end regardless of direction.
+      sorted.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
     } else if (sortBy === "price-desc") {
-      sorted.sort((a, b) => b.price - a.price);
+      sorted.sort((a, b) => (b.price ?? -Infinity) - (a.price ?? -Infinity));
     } else if (sortBy === "name-asc") {
       sorted.sort((a, b) => a.name.localeCompare(b.name));
     } else {

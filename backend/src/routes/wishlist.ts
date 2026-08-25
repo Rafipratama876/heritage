@@ -19,7 +19,7 @@ function serializeItems(
       slug: string;
       code: string;
       name: string;
-      price: number;
+      price: number | null;
       images: { url: string }[];
     };
   }[]

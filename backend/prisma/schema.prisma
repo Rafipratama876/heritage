@@ -46,6 +46,7 @@ model User {
   email         String         @unique
   password      String
   phone         String?
+  address       String?        @db.Text
   role          Role           @default(CUSTOMER)
   cart          Cart?
   wishlistItems WishlistItem[]
@@ -95,7 +96,10 @@ model Product {
   code             String              @unique
   slug             String              @unique
   name             String
-  price            Int
+  // Null means "no price" — the product is display/inquiry-only, shown
+  // as "Contact for price" instead of a number, with ordering routed
+  // through a WhatsApp inquiry rather than Add to Cart.
+  price            Int?
   shortDescription String              @db.Text
   description      String              @db.Text
   featured         Boolean             @default(false)

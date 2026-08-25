@@ -48,7 +48,7 @@ type ApiProduct = {
   code: string;
   slug: string;
   name: string;
-  price: number;
+  price: number | null;
   shortDescription: string;
   description: string;
   categories: string[];
@@ -306,6 +306,7 @@ export async function register(data: {
   email: string;
   password: string;
   phone?: string;
+  address?: string;
 }): Promise<AuthResponse> {
   return authFetch<AuthResponse>("/api/auth/register", {
     method: "POST",
@@ -449,13 +450,13 @@ export type ServerWishlistItem = {
   productId: string;
   slug: string;
   name: string;
-  price: number;
+  price: number | null;
   image: string | null;
 };
 
 type ApiWishlistItem = {
   id: string;
-  product: { id: string; slug: string; code: string; name: string; price: number; image: string | null };
+  product: { id: string; slug: string; code: string; name: string; price: number | null; image: string | null };
 };
 
 function mapWishlistItem(w: ApiWishlistItem): ServerWishlistItem {
@@ -504,7 +505,7 @@ export type ProductInput = {
   code: string;
   slug: string;
   name: string;
-  price: number;
+  price: number | null;
   shortDescription: string;
   description: string;
   collectionSlugs: string[];
@@ -646,6 +647,7 @@ export type AdminUser = {
   name: string;
   email: string;
   phone: string | null;
+  address: string | null;
   role: "CUSTOMER" | "ADMIN";
   createdAt: string;
   _count?: { wishlistItems: number };

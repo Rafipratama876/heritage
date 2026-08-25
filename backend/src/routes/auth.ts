@@ -13,6 +13,7 @@ const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   phone: z.string().optional(),
+  address: z.string().optional(),
 });
 
 router.post(
@@ -22,7 +23,7 @@ router.post(
     if (!parsed.success) {
       throw new ApiError(400, parsed.error.errors.map((e) => e.message).join(", "));
     }
-    const { name, email, password, phone } = parsed.data;
+    const { name, email, password, phone, address } = parsed.data;
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
@@ -31,13 +32,20 @@ router.post(
 
     const hashed = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
-      data: { name, email, password: hashed, phone },
+      data: { name, email, password: hashed, phone, address },
     });
 
     const token = signToken({ sub: user.id, email: user.email, role: user.role });
     res.status(201).json({
       token,
-      user: { id: user.id, name: user.name, email: user.email, role: user.role },
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        role: user.role,
+      },
     });
   })
 );
@@ -78,7 +86,14 @@ router.post(
     const token = signToken({ sub: user.id, email: user.email, role: user.role });
     res.json({
       token,
-      user: { id: user.id, name: user.name, email: user.email, role: user.role },
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        role: user.role,
+      },
     });
   })
 );
@@ -104,7 +119,46 @@ router.get(
   asyncHandler(async (req, res) => {
     const user = await prisma.user.findUnique({ where: { id: req.user!.sub } });
     if (!user) throw new ApiError(404, "User not found");
-    res.json({ id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role });
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      role: user.role,
+    });
+  })
+);
+
+// PATCH /api/auth/me — lets a logged-in customer update their own name,
+// phone, and address (email/password/role are not editable here).
+const updateMeSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters").optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+});
+
+router.patch(
+  "/me",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const parsed = updateMeSchema.safeParse(req.body);
+    if (!parsed.success) {
+      throw new ApiError(400, parsed.error.errors.map((e) => e.message).join(", "));
+    }
+
+    const user = await prisma.user.update({
+      where: { id: req.user!.sub },
+      data: parsed.data,
+    });
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      role: user.role,
+    });
   })
 );
 

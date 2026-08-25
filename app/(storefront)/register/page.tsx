@@ -8,6 +8,7 @@ import {
   HiOutlineLockClosed,
   HiOutlineUser,
   HiOutlinePhone,
+  HiOutlineLocationMarker,
   HiEye,
   HiEyeOff,
 } from "react-icons/hi";
@@ -22,6 +23,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -45,6 +47,7 @@ export default function RegisterPage() {
         email,
         password,
         phone: phone.trim() || undefined,
+        address: address.trim() || undefined,
       });
       router.push(redirectTo);
     } catch (err) {
@@ -125,6 +128,23 @@ export default function RegisterPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+62 812-3456-7890"
+                  className="w-full bg-canvas border border-line pl-11 pr-4 py-3.5 text-sm text-ivory placeholder:text-muted focus:border-brass outline-none transition-colors"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="address" className="eyebrow block mb-2">
+                Address <span className="text-muted font-normal">(optional)</span>
+              </label>
+              <div className="relative">
+                <HiOutlineLocationMarker className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                <input
+                  id="address"
+                  type="text"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Shipping address"
                   className="w-full bg-canvas border border-line pl-11 pr-4 py-3.5 text-sm text-ivory placeholder:text-muted focus:border-brass outline-none transition-colors"
                 />
               </div>

@@ -33,7 +33,10 @@ function serializeCart(cart: NonNullable<Awaited<ReturnType<typeof getOrCreateCa
       price: item.product.price,
       image: item.product.images[0]?.url ?? null,
     },
-    lineTotal: item.product.price * item.quantity,
+    // Cart items are only ever created for priced products — see the
+    // check in POST /items — so this is always a real number in
+    // practice; `?? 0` is just a defensive fallback.
+    lineTotal: (item.product.price ?? 0) * item.quantity,
   }));
 
   return {
@@ -83,6 +86,9 @@ router.post(
 
     const product = await prisma.product.findUnique({ where: { id: productId } });
     if (!product) throw new ApiError(404, "Product not found");
+    if (product.price == null) {
+      throw new ApiError(400, "This product has no price and can't be added to a cart — order it via WhatsApp instead");
+    }
 
     const cart = await getOrCreateCart(req.user!.sub);
     const existingItem = cart.items.find((i) => i.productId === productId);

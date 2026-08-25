@@ -43,6 +43,7 @@ export default function ProductForm({
   const [code, setCode] = useState(initialProduct?.code ?? "");
   const [slug, setSlug] = useState(initialProduct?.slug ?? "");
   const [name, setName] = useState(initialProduct?.name ?? "");
+  const [noPrice, setNoPrice] = useState(initialProduct ? initialProduct.price == null : false);
   const [price, setPrice] = useState(String(initialProduct?.price ?? ""));
   const [shortDescription, setShortDescription] = useState(initialProduct?.shortDescription ?? "");
   const [description, setDescription] = useState(initialProduct?.description ?? "");
@@ -104,6 +105,10 @@ export default function ProductForm({
       fail("You're not logged in.");
       return;
     }
+    if (!noPrice && price.trim() === "") {
+      fail("Enter a price, or check \"No price\".");
+      return;
+    }
     if (images.length === 0) {
       fail("At least one image is required.");
       return;
@@ -121,7 +126,7 @@ export default function ProductForm({
       code,
       slug,
       name,
-      price: Number(price),
+      price: noPrice ? null : Number(price),
       shortDescription,
       description,
       collectionSlugs,
@@ -153,7 +158,7 @@ export default function ProductForm({
     <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
       {error && <p className="text-clay text-sm">{error}</p>}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Code">
           <input value={code} onChange={(e) => setCode(e.target.value)} required className="input" />
         </Field>
@@ -172,9 +177,19 @@ export default function ProductForm({
           min={0}
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          required
-          className="input"
+          disabled={noPrice}
+          required={!noPrice}
+          className="input disabled:opacity-40"
         />
+        <label className="flex items-center gap-2 text-sm text-ivory/80 mt-2">
+          <input
+            type="checkbox"
+            checked={noPrice}
+            onChange={(e) => setNoPrice(e.target.checked)}
+            className="accent-brass"
+          />
+          No price (display &amp; inquiry only — shown as &quot;Contact for price&quot;, orders routed through WhatsApp instead of Add to Cart)
+        </label>
       </Field>
 
       <Field label="Categories (select one or more)">

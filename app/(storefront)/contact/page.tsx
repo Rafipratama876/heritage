@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { FaWhatsapp, FaInstagram } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
 import { HiOutlineMail, HiOutlinePhone, HiOutlineLocationMarker, HiOutlineClock } from "react-icons/hi";
 import Breadcrumb from "@/components/Breadcrumb";
 import Reveal from "@/components/Reveal";
-import { buildWhatsAppLink } from "@/lib/utils";
+import WhatsAppChatButton from "@/components/WhatsAppChatButton";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -96,14 +96,7 @@ export default function ContactPage() {
           </div>
 
           <div className="flex flex-wrap gap-4 mt-8">
-            <a
-              href={buildWhatsAppLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary"
-            >
-              <FaWhatsapp /> Chat on WhatsApp
-            </a>
+            <WhatsAppChatButton />
             <a
               href="https://www.instagram.com/rizal_heritage/"
               target="_blank"

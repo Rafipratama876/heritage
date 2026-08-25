@@ -30,7 +30,9 @@ export type Product = {
   code: string; // catalog code, e.g. RH-014
   slug: string;
   name: string;
-  price: number;
+  // null = "no price" — display/inquiry-only listing (shown as "Contact
+  // for price"); Add to Cart is hidden for these products.
+  price: number | null;
   shortDescription: string;
   description: string;
   collections: string[]; // Collection slugs
@@ -47,6 +49,7 @@ export type AuthUser = {
   name: string;
   email: string;
   phone?: string;
+  address?: string | null;
   role: "CUSTOMER" | "ADMIN";
 };
 

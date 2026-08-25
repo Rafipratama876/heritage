@@ -121,6 +121,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const addItem = useCallback(
     async (product: Product, quantity = 1) => {
+      // "No price" products are inquiry-only — see WhatsAppOrderButton
+      // instead. Add to Cart is hidden for them in the UI; this guard
+      // also keeps `product.price` narrowed to `number` below.
+      if (product.price == null) return;
       const token = readToken();
       if (isAuthenticated && token) {
         const updated = await addCartItem(token, product.id, quantity);

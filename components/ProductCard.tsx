@@ -23,7 +23,7 @@ export default function ProductCard({
   function handleQuickAdd(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    if (!product.available) return;
+    if (!product.available || product.price == null) return;
     addItem(product, 1);
   }
 
@@ -73,7 +73,7 @@ export default function ProductCard({
           >
             {wishlisted ? <HiHeart className="text-base" /> : <HiOutlineHeart className="text-base" />}
           </button>
-          {product.available && (
+          {product.available && product.price != null && (
             <button
               type="button"
               aria-label={`Add ${product.name} to cart`}

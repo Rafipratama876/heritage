@@ -97,24 +97,26 @@ export default function WishlistDrawer() {
                         </p>
 
                         <div className="flex items-center gap-3 mt-3">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              addItem(
-                                {
-                                  id: item.productId,
-                                  slug: item.slug,
-                                  name: item.name,
-                                  price: item.price,
-                                  images: item.image ? [item.image] : [],
-                                } as any,
-                                1
-                              )
-                            }
-                            className="flex items-center gap-1.5 text-xs text-ivory/80 hover:text-brass transition-colors border border-line px-3 py-1.5"
-                          >
-                            <HiOutlineShoppingBag /> Add to cart
-                          </button>
+                          {item.price != null && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                addItem(
+                                  {
+                                    id: item.productId,
+                                    slug: item.slug,
+                                    name: item.name,
+                                    price: item.price,
+                                    images: item.image ? [item.image] : [],
+                                  } as any,
+                                  1
+                                )
+                              }
+                              className="flex items-center gap-1.5 text-xs text-ivory/80 hover:text-brass transition-colors border border-line px-3 py-1.5"
+                            >
+                              <HiOutlineShoppingBag /> Add to cart
+                            </button>
+                          )}
                           <button
                             type="button"
                             aria-label={`Remove ${item.name} from wishlist`}

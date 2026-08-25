@@ -19,7 +19,7 @@ export type WishlistItem = {
   productId: string;
   slug: string;
   name: string;
-  price: number;
+  price: number | null;
   image: string | null;
 };
 

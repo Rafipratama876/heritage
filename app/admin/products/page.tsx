@@ -67,8 +67,8 @@ export default function AdminProductsPage() {
       ) : products.length === 0 ? (
         <p className="text-muted text-sm">No products yet.</p>
       ) : (
-        <div className="border border-line">
-          <table className="w-full text-sm">
+        <div className="border border-line overflow-x-auto">
+          <table className="w-full text-sm min-w-[640px]">
             <thead>
               <tr className="border-b border-line text-left">
                 <th className="p-3 font-normal text-muted w-16"></th>

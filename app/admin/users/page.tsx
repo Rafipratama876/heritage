@@ -76,12 +76,13 @@ export default function AdminUsersPage() {
       {!users ? (
         <p className="text-muted text-sm">Loading…</p>
       ) : (
-        <div className="border border-line">
-          <table className="w-full text-sm">
+        <div className="border border-line overflow-x-auto">
+          <table className="w-full text-sm min-w-[640px]">
             <thead>
               <tr className="border-b border-line text-left">
                 <th className="p-3 font-normal text-muted">Name</th>
                 <th className="p-3 font-normal text-muted">Email</th>
+                <th className="p-3 font-normal text-muted">Address</th>
                 <th className="p-3 font-normal text-muted">Role</th>
                 <th className="p-3 font-normal text-muted">Joined</th>
                 <th className="p-3 font-normal text-muted w-16"></th>
@@ -97,6 +98,9 @@ export default function AdminUsersPage() {
                     )}
                   </td>
                   <td className="p-3 text-muted">{u.email}</td>
+                  <td className="p-3 text-muted max-w-[220px] truncate" title={u.address ?? undefined}>
+                    {u.address || <span className="text-muted/50">—</span>}
+                  </td>
                   <td className="p-3">
                     <select
                       value={u.role}

@@ -57,14 +57,18 @@ export default async function ProductDetailPage({
     description: product.description,
     image: product.images,
     sku: product.code,
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "IDR",
-      price: product.price,
-      availability: product.available
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-    },
+    // Omit the `offers` block entirely for "no price" products — Schema.org
+    // requires a numeric price when an Offer is present.
+    ...(product.price != null && {
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "IDR",
+        price: product.price,
+        availability: product.available
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      },
+    }),
   };
 
   return (
@@ -111,7 +115,7 @@ export default async function ProductDetailPage({
           <div className="mt-8 space-y-3">
             {product.available ? (
               <>
-                <AddToCartForm product={product} />
+                {product.price != null && <AddToCartForm product={product} />}
                 <div className="flex items-center gap-3">
                   <div className="flex-1">
                     <WhatsAppOrderButton productId={product.id} productName={product.name} />

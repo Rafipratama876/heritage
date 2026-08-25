@@ -18,6 +18,7 @@ router.get(
         name: true,
         email: true,
         phone: true,
+        address: true,
         role: true,
         createdAt: true,
         _count: { select: { wishlistItems: true } },
@@ -45,7 +46,7 @@ router.patch(
     const user = await prisma.user.update({
       where: { id: req.params.id },
       data: { role: parsed.data.role },
-      select: { id: true, name: true, email: true, phone: true, role: true, createdAt: true },
+      select: { id: true, name: true, email: true, phone: true, address: true, role: true, createdAt: true },
     });
     res.json(user);
   })
