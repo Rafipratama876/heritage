@@ -48,7 +48,7 @@ export default function Home({ featuredProducts, collections, galleryItems }) {
                     <div className="absolute inset-0 bg-gradient-to-t from-canvas via-canvas/70 to-canvas/50" />
                 </div>
 
-                <div className="container-content relative pb-20 pt-40">
+                <div className="container-content relative pb-20 pt-40 w-full">
                     <p
                         className="eyebrow mb-5 animate-fadeUp drop-shadow-[0_1px_3px_rgba(0,0,0,0.55)]"
                         style={{ animationDelay: '0.1s', opacity: 0 }}
