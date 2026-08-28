@@ -13,6 +13,7 @@ const NAV_LINKS = [
     { href: '/products', label: 'Products' },
     { href: '/collections', label: 'Collections' },
     { href: '/gallery', label: 'Gallery' },
+    { href: '/our-story', label: 'Our Story' },
     { href: '/shipping', label: 'Shipping & Delivery' },
     { href: '/contact', label: 'Contact Us' },
 ];
