@@ -29,6 +29,9 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/shipping', function () {
     return Inertia::render('Storefront/Shipping');
 })->name('shipping');
+Route::get('/our-story', function () {
+    return Inertia::render('Storefront/OurStory');
+})->name('our-story');
 
 Route::get('/api/products/search', [ProductController::class, 'search'])->name('products.search');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
