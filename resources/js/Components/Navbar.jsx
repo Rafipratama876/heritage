@@ -74,12 +74,16 @@ export default function Navbar() {
                     : 'bg-canvas/60 backdrop-blur-sm border-transparent'
             )}
         >
-            <nav className="container-content flex items-center justify-between h-20">
+            <nav className="container-content flex items-center h-20">
                 <Link href="/" className="flex items-center group shrink-0">
                     <img src="/images/logo.png" alt="Rizal Heritage" className="h-14 w-auto" />
                 </Link>
 
-                <ul className="hidden lg:flex items-center gap-8">
+                {/* Fixed offset from the logo (not justify-between-distributed,
+                    which shifted this list's x-position with viewport width) —
+                    keeps "Home" at a constant left position so the hero
+                    heading on the homepage can align to it precisely. */}
+                <ul className="hidden lg:flex items-center gap-8 ml-14">
                     {NAV_LINKS.map((link) => {
                         const active = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
                         return (
@@ -104,7 +108,7 @@ export default function Navbar() {
                     })}
                 </ul>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 ml-auto">
                     <button
                         type="button"
                         aria-label="Search products"

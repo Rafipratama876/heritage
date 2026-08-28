@@ -48,7 +48,13 @@ export default function Home({ featuredProducts, collections, galleryItems }) {
                     <div className="absolute inset-0 bg-gradient-to-t from-canvas via-canvas/70 to-canvas/50" />
                 </div>
 
-                <div className="container-content relative pb-20 pt-40 w-full">
+                {/* lg:pl-[117px] nudges the heading to align with the "Home"
+                    nav link above it (measured: Home sits 117px right of the
+                    logo/container edge, now a fixed offset since Navbar.jsx's
+                    nav list has a fixed ml-14 instead of justify-between).
+                    Only applied at lg+ since nav links are hidden below that,
+                    where aligning to the logo/container edge instead is right. */}
+                <div className="container-content relative pb-20 pt-40 w-full lg:pl-[165px]">
                     <p
                         className="eyebrow mb-5 animate-fadeUp drop-shadow-[0_1px_3px_rgba(0,0,0,0.55)]"
                         style={{ animationDelay: '0.1s', opacity: 0 }}
