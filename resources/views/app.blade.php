@@ -6,6 +6,13 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        <!-- Favicon — the round "RH" Rizal Heritage badge (public/images/logo.png),
+             cropped square and resized into the standard favicon sizes. -->
+        <link rel="icon" href="/favicon.ico" sizes="any">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
         <!-- Fonts — same three Google Fonts as the old Next.js app
              (there loaded via next/font/google; here via plain <link>
              tags, which is all a non-Node production server needs). -->
