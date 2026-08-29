@@ -39,7 +39,7 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit Instagram"
-                            className="hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
                         >
                             <FaInstagram />
                         </a>
@@ -48,7 +48,7 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit our Facebook page"
-                            className="hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
                         >
                             <FaFacebook />
                         </a>
@@ -57,14 +57,14 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit our Shopee store"
-                            className="hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
                         >
                             <SiShopee />
                         </a>
                         <a
                             href="mailto:rizalhijazi@gmail.com"
                             aria-label="Send an email"
-                            className="hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
                         >
                             <FaEnvelope />
                         </a>

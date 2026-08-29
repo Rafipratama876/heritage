@@ -100,7 +100,7 @@ export default function Home({ featuredProducts, collections, galleryItems }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit Instagram"
-                            className="text-2xl text-ivory/80 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-6 h-6 text-2xl text-ivory/80 hover:text-brass transition-colors"
                         >
                             <FaInstagram />
                         </a>
@@ -109,7 +109,7 @@ export default function Home({ featuredProducts, collections, galleryItems }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit our Shopee store"
-                            className="text-2xl text-ivory/80 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-6 h-6 text-2xl text-ivory/80 hover:text-brass transition-colors"
                         >
                             <SiShopee />
                         </a>
@@ -118,7 +118,7 @@ export default function Home({ featuredProducts, collections, galleryItems }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit our Facebook page"
-                            className="text-2xl text-ivory/80 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-6 h-6 text-2xl text-ivory/80 hover:text-brass transition-colors"
                         >
                             <FaFacebook />
                         </a>
