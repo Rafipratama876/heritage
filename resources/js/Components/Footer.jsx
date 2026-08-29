@@ -41,7 +41,11 @@ export default function Footer() {
                             aria-label="Visit Instagram"
                             className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
                         >
-                            <FaInstagram />
+                            {/* Sizes tuned per-icon (see the same note in
+                                Home.jsx) so the visible glyph height is equal
+                                despite each icon's artwork filling a
+                                different share of its own square viewBox. */}
+                            <FaInstagram size={18} />
                         </a>
                         <a
                             href="https://www.facebook.com/marketplace/profile/100028906128157/?ref=permalink&mibextid=6ojiHh"
@@ -50,7 +54,7 @@ export default function Footer() {
                             aria-label="Visit our Facebook page"
                             className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
                         >
-                            <FaFacebook />
+                            <FaFacebook size={17} />
                         </a>
                         <a
                             href="https://shopee.co.id/dhina17_"
@@ -59,14 +63,14 @@ export default function Footer() {
                             aria-label="Visit our Shopee store"
                             className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
                         >
-                            <SiShopee />
+                            <SiShopee size={16} />
                         </a>
                         <a
                             href="mailto:rizalhijazi@gmail.com"
                             aria-label="Send an email"
                             className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
                         >
-                            <FaEnvelope />
+                            <FaEnvelope size={21} />
                         </a>
                     </div>
                 </div>

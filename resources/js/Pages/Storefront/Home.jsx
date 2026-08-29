@@ -100,27 +100,34 @@ export default function Home({ featuredProducts, collections, galleryItems }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit Instagram"
-                            className="flex items-center justify-center w-6 h-6 text-2xl text-ivory/80 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-6 h-6 text-ivory/80 hover:text-brass transition-colors"
                         >
-                            <FaInstagram />
+                            {/* Each brand icon's own artwork fills a different
+                                share of its square viewBox (Instagram ~88%,
+                                Facebook ~96%, Shopee ~100% — no built-in
+                                padding at all), so equal font-size/box alone
+                                still reads as mismatched sizes. Sizes below
+                                are tuned per-icon so the visible glyph height
+                                — not just the container — ends up equal. */}
+                            <FaInstagram size={24} />
                         </a>
                         <a
                             href="https://shopee.co.id/dhina17_"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit our Shopee store"
-                            className="flex items-center justify-center w-6 h-6 text-2xl text-ivory/80 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-6 h-6 text-ivory/80 hover:text-brass transition-colors"
                         >
-                            <SiShopee />
+                            <SiShopee size={21} />
                         </a>
                         <a
                             href="https://www.facebook.com/marketplace/profile/100028906128157/?ref=permalink&mibextid=6ojiHh"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit our Facebook page"
-                            className="flex items-center justify-center w-6 h-6 text-2xl text-ivory/80 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-6 h-6 text-ivory/80 hover:text-brass transition-colors"
                         >
-                            <FaFacebook />
+                            <FaFacebook size={22} />
                         </a>
                     </div>
                 </div>
