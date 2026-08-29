@@ -4,7 +4,7 @@ import SectionHeading from '@/Components/SectionHeading';
 import WhatsAppOrderButton from '@/Components/WhatsAppOrderButton';
 import StorefrontLayout from '@/Layouts/StorefrontLayout';
 import { Head, Link } from '@inertiajs/react';
-import { FaFacebook } from 'react-icons/fa';
+import { FaFacebook, FaInstagram } from 'react-icons/fa';
 import { GiSewingNeedle } from 'react-icons/gi';
 import { HiArrowRight, HiOutlineGlobeAlt, HiOutlineLocationMarker, HiOutlineSparkles } from 'react-icons/hi';
 import { SiShopee } from 'react-icons/si';
@@ -95,6 +95,15 @@ export default function Home({ featuredProducts, collections, galleryItems }) {
                         style={{ animationDelay: '0.6s', opacity: 0 }}
                     >
                         <span className="text-xs text-muted uppercase tracking-wide">Also find us on</span>
+                        <a
+                            href="https://www.instagram.com/rizal_heritage/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Visit Instagram"
+                            className="text-2xl text-ivory/80 hover:text-brass transition-colors"
+                        >
+                            <FaInstagram />
+                        </a>
                         <a
                             href="https://shopee.co.id/dhina17_"
                             target="_blank"
