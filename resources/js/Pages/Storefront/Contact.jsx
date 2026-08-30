@@ -1,8 +1,9 @@
 import Breadcrumb from '@/Components/Breadcrumb';
 import Reveal from '@/Components/Reveal';
 import StorefrontLayout from '@/Layouts/StorefrontLayout';
+import { useToast } from '@/Providers/ToastProvider';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
-import { Head } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { HiOutlineClock, HiOutlineLocationMarker, HiOutlineMail } from 'react-icons/hi';
 
@@ -26,6 +27,21 @@ const CONTACT_ITEMS = [
 ];
 
 export default function Contact() {
+    const page = usePage();
+    const auth = page.props.auth;
+    const { showToast } = useToast();
+
+    // Same login gate as WhatsAppOrderButton.jsx/CartDrawer.jsx — chatting
+    // on WhatsApp from here requires an account, guests get sent to /login
+    // (with a redirect back to Contact) instead of opening WhatsApp.
+    function handleWhatsAppClick(e) {
+        if (!auth?.user) {
+            e.preventDefault();
+            showToast('Please log in to chat with us on WhatsApp.', 'info');
+            router.visit(`/login?redirect=${encodeURIComponent(page.url)}`);
+        }
+    }
+
     return (
         <StorefrontLayout>
             <Head title="Contact Us" />
@@ -96,6 +112,7 @@ export default function Contact() {
                                 href={buildWhatsAppLink()}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={handleWhatsAppClick}
                                 className="btn-primary"
                             >
                                 <FaWhatsapp /> Chat on WhatsApp

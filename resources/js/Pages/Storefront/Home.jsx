@@ -55,8 +55,9 @@ export default function Home({ featuredProducts, collections, galleryItems }) {
                     Only applied at lg+ since nav links are hidden below that,
                     where aligning to the logo/container edge instead is right. */}
                 <div className="container-content relative pb-20 pt-40 w-full lg:pl-[165px]">
+                    {/* Color per client spec: CMYK 54.9/65.1/81.57/67.45 → #251D0F. */}
                     <p
-                        className="eyebrow mb-5 animate-fadeUp drop-shadow-[0_1px_3px_rgba(0,0,0,0.55)]"
+                        className="eyebrow mb-5 animate-fadeUp drop-shadow-[0_1px_3px_rgba(0,0,0,0.55)] text-[#251D0F]"
                         style={{ animationDelay: '0.1s', opacity: 0 }}
                     >
                         Est. 1998 &bull; Curating Indonesian Textile Heritage &bull; Java &amp; Sumatra,
@@ -100,34 +101,30 @@ export default function Home({ featuredProducts, collections, galleryItems }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit Instagram"
-                            className="flex items-center justify-center w-6 h-6 text-ivory/80 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-ivory text-canvas hover:bg-brass transition-colors"
                         >
-                            {/* Each brand icon's own artwork fills a different
-                                share of its square viewBox (Instagram ~88%,
-                                Facebook ~96%, Shopee ~100% — no built-in
-                                padding at all), so equal font-size/box alone
-                                still reads as mismatched sizes. Sizes below
-                                are tuned per-icon so the visible glyph height
-                                — not just the container — ends up equal. */}
-                            <FaInstagram size={24} />
+                            {/* Same badge style + per-icon sizes as
+                                Footer.jsx's social row, kept identical so
+                                both places read as one consistent design. */}
+                            <FaInstagram size={17} />
                         </a>
                         <a
                             href="https://shopee.co.id/dhina17_"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit our Shopee store"
-                            className="flex items-center justify-center w-6 h-6 text-ivory/80 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-ivory text-canvas hover:bg-brass transition-colors"
                         >
-                            <SiShopee size={21} />
+                            <SiShopee size={15} />
                         </a>
                         <a
                             href="https://www.facebook.com/marketplace/profile/100028906128157/?ref=permalink&mibextid=6ojiHh"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit our Facebook page"
-                            className="flex items-center justify-center w-6 h-6 text-ivory/80 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-ivory text-canvas hover:bg-brass transition-colors"
                         >
-                            <FaFacebook size={22} />
+                            <FaFacebook size={16} />
                         </a>
                     </div>
                 </div>

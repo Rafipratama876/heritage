@@ -130,7 +130,6 @@ export default function Footer() {
             <div className="border-t border-line">
                 <div className="container-content py-6 flex flex-col sm:flex-row justify-between gap-2 text-xs text-muted">
                     <p>&copy; {new Date().getFullYear()} Rizal Heritage. All rights reserved.</p>
-                    <p>Handmade in Pekalongan, Indonesia</p>
                 </div>
             </div>
         </footer>
