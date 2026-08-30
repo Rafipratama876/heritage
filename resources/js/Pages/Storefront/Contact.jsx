@@ -16,7 +16,7 @@ const ADDRESSES = [
 ];
 
 const CONTACT_ITEMS = [
-    { icon: HiOutlineClock, label: 'Business Hours', value: 'MONDAY - SUNDAY | 10.00 - 17.00 WIB' },
+    { icon: HiOutlineClock, label: 'Business Hours', value: 'MONDAY - SUNDAY | 09.30 - 17.00 WIB' },
     {
         icon: HiOutlineMail,
         label: 'Email',

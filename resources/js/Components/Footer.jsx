@@ -33,44 +33,47 @@ export default function Footer() {
                         Since 1998, Rizal Heritage has been dedicated to preserving Indonesia’s
                         textile heritage through a carefully curated collection .
                     </p>
-                    <div className="flex items-center gap-4 mt-6 text-lg text-muted">
+                    {/* Uniform circular badges (icon-on-solid-circle), all
+                        the same size and evenly spaced — a badge shape
+                        reads as consistent regardless of each icon's own
+                        internal proportions, unlike bare glyphs. Per-icon
+                        sizes are still tuned (see the note that used to be
+                        here) so the glyph itself looks centered/balanced
+                        within the circle. */}
+                    <div className="flex items-center gap-3 mt-6">
                         <a
                             href="https://www.instagram.com/rizal_heritage/"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit Instagram"
-                            className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-ivory text-canvas hover:bg-brass transition-colors"
                         >
-                            {/* Sizes tuned per-icon (see the same note in
-                                Home.jsx) so the visible glyph height is equal
-                                despite each icon's artwork filling a
-                                different share of its own square viewBox. */}
-                            <FaInstagram size={18} />
+                            <FaInstagram size={17} />
                         </a>
                         <a
                             href="https://www.facebook.com/marketplace/profile/100028906128157/?ref=permalink&mibextid=6ojiHh"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit our Facebook page"
-                            className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-ivory text-canvas hover:bg-brass transition-colors"
                         >
-                            <FaFacebook size={17} />
+                            <FaFacebook size={16} />
                         </a>
                         <a
                             href="https://shopee.co.id/dhina17_"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit our Shopee store"
-                            className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-ivory text-canvas hover:bg-brass transition-colors"
                         >
-                            <SiShopee size={16} />
+                            <SiShopee size={15} />
                         </a>
                         <a
                             href="mailto:rizalhijazi@gmail.com"
                             aria-label="Send an email"
-                            className="flex items-center justify-center w-5 h-5 hover:text-brass transition-colors"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-ivory text-canvas hover:bg-brass transition-colors"
                         >
-                            <FaEnvelope size={21} />
+                            <FaEnvelope size={16} />
                         </a>
                     </div>
                 </div>
