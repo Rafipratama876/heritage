@@ -39,13 +39,13 @@ export default function OurStory() {
                     </Reveal>
                     <Reveal delay={0.1} className="order-2">
                         <p className="eyebrow mb-3">Our Story</p>
-                        <p className="text-muted leading-relaxed">
+                        <p className="text-muted leading-relaxed text-justify">
                             Rizal Heritage was founded on a lifelong passion for Indonesia&rsquo;s
                             traditional textiles. Since 1998, M. Hijazi Rizal has dedicated himself to
                             collecting, studying, and preserving some of the country&rsquo;s finest
                             handwoven and batik masterpieces.
                         </p>
-                        <p className="mt-5 text-muted leading-relaxed">
+                        <p className="mt-5 text-muted leading-relaxed text-justify">
                             His journey began in Palembang, where he assisted his brother-in-law in
                             sourcing Songket Palembang to be resold. What started as learning the trade
                             quickly grew into a lifelong calling. By 2000, they opened their first store
@@ -61,7 +61,7 @@ export default function OurStory() {
                 <div className="max-w-2xl mx-auto space-y-6">
                     {STORY_BODY.map((paragraph, i) => (
                         <Reveal key={i} delay={i * 0.06}>
-                            <p className="text-muted leading-relaxed">{paragraph}</p>
+                            <p className="text-muted leading-relaxed text-justify">{paragraph}</p>
                         </Reveal>
                     ))}
                 </div>

@@ -47,7 +47,9 @@ export default function ProductShow({ product, related }) {
                                 CURRENTLY UNAVAILABLE
                             </p>
                         )}
-                        <p className="text-muted mt-6 leading-relaxed">{product.description}</p>
+                        <p className="text-muted mt-6 leading-relaxed text-justify whitespace-pre-line">
+                            {product.description}
+                        </p>
 
                         <div className="mt-8 space-y-3">
                             {!product.available ? (
