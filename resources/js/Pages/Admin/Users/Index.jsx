@@ -40,11 +40,13 @@ export default function Index({ users }) {
             <h1 className="font-display text-3xl text-ivory mb-8">Users</h1>
 
             <div className="border border-line overflow-x-auto">
-                <table className="w-full text-sm min-w-[560px]">
+                <table className="w-full text-sm min-w-[820px]">
                     <thead>
                         <tr className="border-b border-line text-left">
                             <th className="p-3 font-normal text-muted">Name</th>
                             <th className="p-3 font-normal text-muted">Email</th>
+                            <th className="p-3 font-normal text-muted">Phone</th>
+                            <th className="p-3 font-normal text-muted">Address</th>
                             <th className="p-3 font-normal text-muted">Role</th>
                             <th className="p-3 font-normal text-muted">Joined</th>
                             <th className="p-3 font-normal text-muted w-16"></th>
@@ -60,6 +62,10 @@ export default function Index({ users }) {
                                     )}
                                 </td>
                                 <td className="p-3 text-muted">{u.email}</td>
+                                <td className="p-3 text-muted">{u.phone || '—'}</td>
+                                <td className="p-3 text-muted max-w-[220px] truncate" title={u.address || ''}>
+                                    {u.address || '—'}
+                                </td>
                                 <td className="p-3">
                                     <select
                                         value={u.role}

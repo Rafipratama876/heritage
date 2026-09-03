@@ -22,6 +22,7 @@ class UserController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone,
+                'address' => $user->address,
                 'role' => $user->role,
                 'created_at' => $user->created_at,
                 'wishlist_count' => $user->wishlist_items_count,
