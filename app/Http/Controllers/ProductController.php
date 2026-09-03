@@ -104,7 +104,7 @@ class ProductController extends Controller
             'featured' => $product->featured,
             'available' => $product->available,
             'video_url' => $product->video_url,
-            'images' => $product->images->pluck('url'),
+            'images' => $product->images->sortBy('order')->pluck('url')->values(),
             'categories' => $product->categories->map(
                 fn ($c) => ['value' => $c->category, 'label' => Categories::label($c->category)]
             ),
