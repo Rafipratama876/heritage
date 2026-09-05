@@ -4,9 +4,9 @@ export const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '62812345
 
 export function buildWhatsAppLink(productName, productUrl) {
     const message = productName
-        ? `Hello,\nI'm interested in this product:\n\n${productName}${
+        ? `Hello, I'm interested in this product:\n\n${productName}${
               productUrl ? `\n${productUrl}` : ''
-          }\n\nCan I get more information?`
+          }\n\nI would like to purchase this item and have it shipped to my address.\nOrder Form\nFull Name:\nEmail Address:\nShipping Address:\nPhone Number:`
         : 'Hello, I\'d like to know more about Rizal Heritage products.';
 
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -20,9 +20,9 @@ export function buildWhatsAppCartLink(items, totalPrice, siteOrigin) {
         })
         .join('\n\n');
 
-    const message = `Hello, I'd like to order the following:\n\n${lines}\n\nTotal: ${formatIDR(
+    const message = `Hello, I'm interested in these products:\n\n${lines}\n\nTotal: ${formatIDR(
         totalPrice
-    )}\n\nCan you help me proceed with this order?`;
+    )}\n\nI would like to purchase these items and have them shipped to my address.\nOrder Form\nFull Name:\nEmail Address:\nShipping Address:\nPhone Number:`;
 
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }

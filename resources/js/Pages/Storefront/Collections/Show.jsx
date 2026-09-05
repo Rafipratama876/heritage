@@ -16,7 +16,7 @@ export default function CollectionShow({ collection }) {
                         className="absolute inset-0 w-full h-full object-cover opacity-50"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-canvas via-canvas/60 to-canvas/10" />
-                    <div className="container-content relative pb-12">
+                    <div className="container-content relative pb-12 text-center">
                         <Breadcrumb
                             items={[
                                 { label: 'Home', href: '/' },
@@ -26,12 +26,13 @@ export default function CollectionShow({ collection }) {
                                     : []),
                                 { label: collection.name },
                             ]}
+                            className="justify-center"
                         />
                         <p className="eyebrow mb-3">{collection.products.length} Pieces</p>
                         <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-ivory">
                             {collection.name}
                         </h1>
-                        <p className="text-muted mt-4 max-w-lg">{collection.description}</p>
+                        <p className="text-muted mt-4 max-w-lg mx-auto">{collection.description}</p>
                     </div>
                 </div>
 

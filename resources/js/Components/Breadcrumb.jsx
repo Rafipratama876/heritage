@@ -1,13 +1,14 @@
+import { cn } from '@/lib/cn';
 import { Link } from '@inertiajs/react';
 import { HiChevronRight } from 'react-icons/hi';
 
-export default function Breadcrumb({ items }) {
+export default function Breadcrumb({ items, className }) {
     return (
         <nav aria-label="Breadcrumb" className="mb-8">
             {/* Color per client spec: CMYK 54.9/65.1/81.57/67.45 → #251D0F
                 (was text-muted, which read as too washed-out against the
                 hero pattern background on several pages). */}
-            <ol className="flex flex-wrap items-center gap-2 text-xs text-[#251D0F]">
+            <ol className={cn('flex flex-wrap items-center gap-2 text-xs text-[#251D0F]', className)}>
                 {items.map((item, i) => {
                     const isLast = i === items.length - 1;
                     return (
