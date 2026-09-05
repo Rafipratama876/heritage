@@ -11,6 +11,7 @@ export default function ProductForm({ mode, product, categories, collections }) 
         slug: product?.slug ?? '',
         name: product?.name ?? '',
         price: product?.price ?? '',
+        price_usd: product?.price_usd ?? '',
         short_description: product?.short_description ?? '',
         description: product?.description ?? '',
         categories: product?.categories ?? [],
@@ -111,6 +112,21 @@ export default function ProductForm({ mode, product, categories, collections }) 
                     />
                     Price not available yet (shows "Hubungi Kami" and hides Add to Cart)
                 </label>
+            </Field>
+
+            <Field label="Price (USD, optional)" error={errors.price_usd}>
+                <input
+                    type="number"
+                    min={0}
+                    step="0.01"
+                    value={data.price_usd}
+                    onChange={(e) => setData('price_usd', e.target.value === '' ? '' : Number(e.target.value))}
+                    className="input"
+                    placeholder="e.g. 120.00"
+                />
+                <p className="text-xs text-muted mt-1.5">
+                    Entered manually — not auto-converted from the IDR price above.
+                </p>
             </Field>
 
             <Field label="Categories (select one or more)" error={errors.categories}>

@@ -82,6 +82,9 @@ class ProductController extends Controller
             // the number input keeps a normal entry mandatory, and this
             // rule re-validates that server-side in store()/update().
             'price' => ['nullable', 'integer', 'min:0'],
+            // Manual USD price — admin types it in directly, no
+            // auto-conversion from the IDR price above.
+            'price_usd' => ['nullable', 'numeric', 'min:0'],
             'short_description' => ['required', 'string'],
             'description' => ['required', 'string'],
             'featured' => ['boolean'],
@@ -106,6 +109,7 @@ class ProductController extends Controller
             'slug' => $data['slug'],
             'name' => $data['name'],
             'price' => $data['price'] ?? null,
+            'price_usd' => $data['price_usd'] ?? null,
             'short_description' => $data['short_description'],
             'description' => $data['description'],
             'featured' => $data['featured'] ?? false,
@@ -153,6 +157,7 @@ class ProductController extends Controller
             'slug' => $product->slug,
             'name' => $product->name,
             'price' => $product->price,
+            'price_usd' => $product->price_usd,
             'short_description' => $product->short_description,
             'description' => $product->description,
             'featured' => $product->featured,

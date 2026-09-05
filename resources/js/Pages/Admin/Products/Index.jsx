@@ -1,6 +1,6 @@
 import { useToast } from '@/Providers/ToastProvider';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { formatIDR, hasPrice } from '@/lib/format';
+import { formatIDR, formatUSD, hasPrice, hasUsdPrice } from '@/lib/format';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { HiOutlinePencil, HiOutlineTrash, HiPlus } from 'react-icons/hi';
@@ -37,14 +37,15 @@ export default function Index({ products }) {
                 <p className="text-muted text-sm">No products yet.</p>
             ) : (
                 <div className="border border-line overflow-x-auto">
-                    <table className="w-full text-sm min-w-[640px]">
+                    <table className="w-full text-sm min-w-[760px]">
                         <thead>
                             <tr className="border-b border-line text-left">
                                 <th className="p-3 font-normal text-muted w-16"></th>
                                 <th className="p-3 font-normal text-muted">Name</th>
                                 <th className="p-3 font-normal text-muted">Category</th>
                                 <th className="p-3 font-normal text-muted">Collection</th>
-                                <th className="p-3 font-normal text-muted text-right">Price</th>
+                                <th className="p-3 font-normal text-muted text-right">Price (IDR)</th>
+                                <th className="p-3 font-normal text-muted text-right">Price (USD)</th>
                                 <th className="p-3 font-normal text-muted w-24"></th>
                             </tr>
                         </thead>
@@ -84,6 +85,13 @@ export default function Index({ products }) {
                                             formatIDR(p.price)
                                         ) : (
                                             <span className="text-muted">No price set</span>
+                                        )}
+                                    </td>
+                                    <td className="p-3 text-ivory text-right font-mono">
+                                        {hasUsdPrice(p.price_usd) ? (
+                                            formatUSD(p.price_usd)
+                                        ) : (
+                                            <span className="text-muted">—</span>
                                         )}
                                     </td>
                                     <td className="p-3">

@@ -42,6 +42,7 @@ class CollectionController extends Controller
                     'slug' => $p->slug,
                     'name' => $p->name,
                     'price' => $p->price,
+                    'price_usd' => $p->price_usd,
                     'available' => $p->available,
                     'images' => $p->images->sortBy('order')->pluck('url')->values(),
                     'categories' => $p->categories->map(

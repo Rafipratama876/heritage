@@ -6,6 +6,19 @@ export function formatIDR(value) {
     }).format(value);
 }
 
+// USD price is a separate value the admin types in manually (no
+// auto-conversion from the IDR price) — see products.price_usd.
+export function formatUSD(value) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(value);
+}
+
+export function hasUsdPrice(value) {
+    return value !== null && value !== undefined;
+}
+
 // Text shown wherever a price would normally appear, for products the
 // admin has deliberately left priceless ("contact us for price").
 export const CONTACT_FOR_PRICE = 'Hubungi Kami';

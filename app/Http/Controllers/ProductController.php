@@ -57,6 +57,7 @@ class ProductController extends Controller
                 'slug' => $p->slug,
                 'name' => $p->name,
                 'price' => $p->price,
+                'price_usd' => $p->price_usd,
                 'images' => $p->images->sortBy('order')->pluck('url')->values(),
             ]);
 
@@ -99,6 +100,7 @@ class ProductController extends Controller
             'slug' => $product->slug,
             'name' => $product->name,
             'price' => $product->price,
+            'price_usd' => $product->price_usd,
             'short_description' => $product->short_description,
             'description' => $product->description,
             'featured' => $product->featured,

@@ -7,7 +7,7 @@ import SectionHeading from '@/Components/SectionHeading';
 import ShareButton from '@/Components/ShareButton';
 import WhatsAppOrderButton from '@/Components/WhatsAppOrderButton';
 import StorefrontLayout from '@/Layouts/StorefrontLayout';
-import { formatPrice, hasPrice } from '@/lib/format';
+import { formatPrice, formatUSD, hasPrice, hasUsdPrice } from '@/lib/format';
 import { Head, Link } from '@inertiajs/react';
 
 export default function ProductShow({ product, related }) {
@@ -41,7 +41,12 @@ export default function ProductShow({ product, related }) {
                         <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-ivory leading-tight">
                             {product.name}
                         </h1>
-                        <p className="font-mono text-xl text-brass mt-4">{formatPrice(product.price)}</p>
+                        <p className="font-mono text-xl text-brass mt-4">
+                            {formatPrice(product.price)}
+                            {hasUsdPrice(product.price_usd) && (
+                                <span className="text-base text-muted"> · {formatUSD(product.price_usd)}</span>
+                            )}
+                        </p>
                         {!product.available && (
                             <p className="inline-block mt-4 font-mono text-xs tracking-widest2 text-clay border border-clay px-2.5 py-1">
                                 CURRENTLY UNAVAILABLE
