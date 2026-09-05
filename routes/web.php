@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AnalyticsController as AdminAnalyticsController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -101,6 +102,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/products/{product:slug}/edit', [AdminProductController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product:slug}', [AdminProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product:slug}', [AdminProductController::class, 'destroy'])->name('products.destroy');
+
+    Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [AdminCategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{category:slug}/edit', [AdminCategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/categories/{category:slug}', [AdminCategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category:slug}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
 
     Route::get('/collections', [AdminCollectionController::class, 'index'])->name('collections.index');
     Route::get('/collections/create', [AdminCollectionController::class, 'create'])->name('collections.create');

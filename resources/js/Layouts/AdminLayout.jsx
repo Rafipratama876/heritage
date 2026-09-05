@@ -11,6 +11,7 @@ import {
     HiOutlineExternalLink,
     HiOutlineLogout,
     HiOutlinePhotograph,
+    HiOutlineTag,
     HiOutlineUsers,
     HiOutlineViewGrid,
     HiX,
@@ -19,6 +20,7 @@ import {
 const NAV_ITEMS = [
     { href: '/admin', label: 'Dashboard', icon: HiOutlineViewGrid, exact: true },
     { href: '/admin/products', label: 'Products', icon: HiOutlineCube },
+    { href: '/admin/categories', label: 'Categories', icon: HiOutlineTag },
     { href: '/admin/collections', label: 'Collections', icon: HiOutlineCollection },
     { href: '/admin/gallery', label: 'Gallery', icon: HiOutlinePhotograph },
     { href: '/admin/users', label: 'Users', icon: HiOutlineUsers },

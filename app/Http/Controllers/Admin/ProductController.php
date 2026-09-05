@@ -91,7 +91,7 @@ class ProductController extends Controller
             'available' => ['boolean'],
             'video_url' => ['nullable', 'url'],
             'categories' => ['required', 'array', 'min:1'],
-            'categories.*' => [Rule::in(array_keys(Categories::LABELS))],
+            'categories.*' => [Rule::in(Categories::values())],
             'collection_slugs' => ['required', 'array', 'min:1'],
             'collection_slugs.*' => ['string', 'exists:collections,slug'],
             'images' => ['required', 'array', 'min:1'],

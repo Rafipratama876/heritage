@@ -63,7 +63,7 @@ export default function Index({ users }) {
                                 </td>
                                 <td className="p-3 text-muted">{u.email}</td>
                                 <td className="p-3 text-muted">{u.phone || '—'}</td>
-                                <td className="p-3 text-muted max-w-[220px] truncate" title={u.address || ''}>
+                                <td className="p-3 text-muted max-w-[280px] whitespace-normal break-words">
                                     {u.address || '—'}
                                 </td>
                                 <td className="p-3">

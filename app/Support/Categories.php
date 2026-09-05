@@ -2,32 +2,33 @@
 
 namespace App\Support;
 
+use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
+
 /**
- * Single source of truth for the product category enum <-> display-label
- * mapping. The old system duplicated this (categoryMap in the Express
- * backend, CATEGORY_DISPLAY in lib/api.ts on the frontend) and the two
- * had to be kept in sync by hand — here it's defined once and shared with
- * the frontend via the `categories` Inertia shared prop.
+ * Product category slug <-> label lookup — backed by the `categories`
+ * table (admin-editable via /admin/categories) rather than a hardcoded
+ * PHP list, so the shop owner can add/rename/remove categories without a
+ * code deploy. Cached for a request's lifetime (and briefly across
+ * requests) since label() gets called once per category per product in
+ * several list views.
  */
 class Categories
 {
-    /**
-     * @var array<string, string> enum value (DB) => display label
-     */
-    public const LABELS = [
-        'batik' => 'Batik',
-        'songket_tenun' => 'Songket and Tenun',
-        'kebaya' => 'Kebaya',
-        'accessories_jewelry' => 'Accessories and Jewelry',
-        'bag' => 'Bag',
-        'jewelry' => 'Jewelry',
-        'plate' => 'Plate',
-        'other_accessories' => 'Other Accessories',
-    ];
+    private static ?array $labels = null;
+
+    private static function all(): array
+    {
+        return self::$labels ??= Cache::remember(
+            'categories.labels',
+            60,
+            fn () => Category::orderBy('order')->pluck('label', 'slug')->all()
+        );
+    }
 
     public static function label(string $value): string
     {
-        return self::LABELS[$value] ?? $value;
+        return self::all()[$value] ?? $value;
     }
 
     /**
@@ -35,9 +36,24 @@ class Categories
      */
     public static function options(): array
     {
-        return collect(self::LABELS)
+        return collect(self::all())
             ->map(fn ($label, $value) => ['value' => $value, 'label' => $label])
             ->values()
             ->all();
+    }
+
+    /**
+     * @return array<int, string> every valid category slug — used for
+     * validation (Rule::in), replacing the old array_keys(LABELS) call.
+     */
+    public static function values(): array
+    {
+        return array_keys(self::all());
+    }
+
+    public static function forget(): void
+    {
+        self::$labels = null;
+        Cache::forget('categories.labels');
     }
 }
