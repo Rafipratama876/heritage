@@ -229,6 +229,15 @@ export default function Navbar() {
                                         >
                                             My Account ({auth.user.name.split(' ')[0]})
                                         </Link>
+                                        {auth.user.role === 'admin' && (
+                                            <Link
+                                                href="/admin"
+                                                tabIndex={open ? undefined : -1}
+                                                className="block py-3 text-base text-brass border-b border-line/60"
+                                            >
+                                                Admin Dashboard
+                                            </Link>
+                                        )}
                                         <button
                                             type="button"
                                             tabIndex={open ? undefined : -1}
