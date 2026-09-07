@@ -99,6 +99,21 @@ function InsightLineChart({ data, series }) {
     );
 }
 
+// Long product names were wrapping onto multiple lines inside the fixed
+// row height, overlapping the bar above/below — truncate instead so every
+// row stays one line; the full name is still there in the tooltip.
+function truncateLabel(label, max = 22) {
+    return label.length > max ? `${label.slice(0, max - 1)}…` : label;
+}
+
+function YAxisTick({ x, y, payload }) {
+    return (
+        <text x={x} y={y} dy={4} textAnchor="end" fontSize={12} fill={CHART_COLORS.ivory}>
+            {truncateLabel(payload.value)}
+        </text>
+    );
+}
+
 function InsightBarChart({ data, dataKey, name, horizontal = false }) {
     if (!data.length) {
         return (
@@ -121,8 +136,9 @@ function InsightBarChart({ data, dataKey, name, horizontal = false }) {
                             <YAxis
                                 type="category"
                                 dataKey="label"
-                                width={140}
-                                tick={{ fontSize: 12, fill: CHART_COLORS.ivory }}
+                                width={150}
+                                tick={<YAxisTick />}
+                                interval={0}
                             />
                         </>
                     ) : (
