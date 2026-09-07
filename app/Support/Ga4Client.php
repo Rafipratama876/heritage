@@ -4,6 +4,7 @@ namespace App\Support;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Minimal Google Analytics Data API (GA4) client — pulls the same kind of
@@ -91,7 +92,9 @@ class Ga4Client
     {
         $response = Http::withToken($token)
             ->post("https://analyticsdata.googleapis.com/v1beta/properties/{$propertyId}:runReport", $body)
-            ->throw();
+            ->throw(function ($response, $e) {
+                Log::error('GA4 runReport failed', ['status' => $response->status(), 'body' => $response->body()]);
+            });
 
         return $response->json();
     }
@@ -123,7 +126,9 @@ class Ga4Client
             $response = Http::asForm()->post('https://oauth2.googleapis.com/token', [
                 'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
                 'assertion' => $jwt,
-            ])->throw();
+            ])->throw(function ($response, $e) {
+                Log::error('GA4 token exchange failed', ['status' => $response->status(), 'body' => $response->body()]);
+            });
 
             return $response->json('access_token');
         });
